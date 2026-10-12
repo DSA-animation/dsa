@@ -1,6 +1,6 @@
 <div class="code">
   @for (line of lines(); track $index) {
-    <div class="line" [class.line--active]="$index === activeLine()">
+    <div class="line" [class.line--active]="isActive($index)">
       <span class="ln">{{ $index + 1 }}</span>
       <span class="tx">{{ line }}</span>
     </div>

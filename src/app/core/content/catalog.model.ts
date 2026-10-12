@@ -60,9 +60,15 @@ export interface Solution {
   approach: string[];
   /** Only for recursive approaches. */
   recipe?: RecursionRecipe;
-  /** Pseudocode lines; index aligns with each language's code lines and with `TraceStep.line`. */
+  /** Pseudocode lines; `TraceStep.line` indexes into this. */
   pseudocode: string[];
   code: Record<Language, string[]>;
+  /**
+   * Optional per-language map: codeMap[lang][i] = the pseudocode line that code
+   * line i highlights on (-1 = never). When absent for a language, code line i
+   * highlights on pseudocode line i (identity) — fine when the code lines up 1:1.
+   */
+  codeMap?: Partial<Record<Language, number[]>>;
   /** Instrumented reference implementation → the trace the player animates. */
   buildTrace: (root: TreeNode | null) => TraceStep[];
 }

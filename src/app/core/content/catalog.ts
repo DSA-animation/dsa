@@ -1,4 +1,6 @@
+import { diameterProblem } from '../../content/trees/diameter';
 import { maxDepthProblem } from '../../content/trees/max-depth';
+import { minDepthProblem } from '../../content/trees/min-depth';
 import { DataStructure, Pattern, Problem } from './catalog.model';
 
 /**
@@ -28,8 +30,8 @@ export const PATTERNS: Record<string, Pattern> = {
     dsId: 'trees',
     title: 'DFS — Bubble-up (postorder)',
     blurb: "Solve a node from its children's answers. The single most common tree pattern.",
-    problemIds: ['maximum-depth'],
-    comingSoon: ['Minimum Depth', 'Balanced Binary Tree', 'Diameter of Binary Tree', 'Invert Binary Tree'],
+    problemIds: ['maximum-depth', 'minimum-depth', 'diameter-of-binary-tree'],
+    comingSoon: ['Balanced Binary Tree', 'Invert Binary Tree'],
   },
   'dual-tree': {
     id: 'dual-tree',
@@ -51,6 +53,8 @@ export const PATTERNS: Record<string, Pattern> = {
 
 export const PROBLEMS: Record<string, Problem> = {
   'maximum-depth': maxDepthProblem,
+  'minimum-depth': minDepthProblem,
+  'diameter-of-binary-tree': diameterProblem,
 };
 
 export const getDataStructure = (id: string): DataStructure | undefined =>

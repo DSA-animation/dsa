@@ -107,7 +107,7 @@
                 }
               </div>
               <p class="hint">Same logic in every language — highlights line-by-line as the animation plays.</p>
-              <am-code-view [lines]="codeLines()" [activeLine]="activeLine()" />
+              <am-code-view [lines]="codeLines()" [activeLine]="activeLine()" [map]="codeMap()" />
             </div>
           }
           @case ('approach') {

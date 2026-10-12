@@ -87,6 +87,7 @@ export class Player {
 
   protected readonly pseudocode = computed(() => this.currentSolution()?.pseudocode ?? []);
   protected readonly codeLines = computed(() => this.currentSolution()?.code[this.language()] ?? []);
+  protected readonly codeMap = computed(() => this.currentSolution()?.codeMap?.[this.language()] ?? null);
 
   constructor() {
     effect((onCleanup) => {
