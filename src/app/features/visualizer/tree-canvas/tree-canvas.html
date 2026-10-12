@@ -1,6 +1,4 @@
-@let data = layout();
-
-@if (data.nodes.length === 0) {
+@if (nodes().length === 0) {
   <p class="empty">Empty tree</p>
 } @else {
   <svg
@@ -11,16 +9,23 @@
     aria-label="Binary tree diagram"
   >
     <g class="edges">
-      @for (e of data.edges; track e.childId) {
+      @for (e of edges(); track e.childId) {
         <line [attr.x1]="e.x1" [attr.y1]="e.y1" [attr.x2]="e.x2" [attr.y2]="e.y2" />
       }
     </g>
 
     <g class="nodes">
-      @for (n of data.nodes; track n.id) {
-        <g class="node" [attr.transform]="'translate(' + n.x + ',' + n.y + ')'">
+      @for (n of nodes(); track n.id) {
+        <g class="node node--{{ n.status }}" [attr.transform]="'translate(' + n.x + ',' + n.y + ')'">
           <circle [attr.r]="radius" />
-          <text text-anchor="middle" dominant-baseline="central">{{ n.val }}</text>
+          <text class="val" text-anchor="middle" dominant-baseline="central">{{ n.val }}</text>
+
+          @if (n.status === 'returned' && n.returnValue !== undefined) {
+            <g class="badge" [attr.transform]="'translate(' + (radius - 3) + ',' + (3 - radius) + ')'">
+              <circle class="badge-bg" r="12" />
+              <text class="badge-text" text-anchor="middle" dominant-baseline="central">{{ n.returnValue }}</text>
+            </g>
+          }
         </g>
       }
     </g>

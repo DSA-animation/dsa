@@ -1,0 +1,103 @@
+@if (problemData(); as p) {
+  <section class="player">
+    <nav class="crumbs">
+      <a routerLink="/">Topics</a>
+      <span class="sep">/</span>
+      <a [routerLink]="['/learn', ds()]">{{ dsData()?.title || ds() }}</a>
+      <span class="sep">/</span>
+      <a [routerLink]="['/learn', ds(), pattern()]">{{ patternData()?.title || pattern() }}</a>
+    </nav>
+
+    <header class="phead">
+      <h1>{{ p.title }}</h1>
+      <div class="chips">
+        <span class="chip chip--diff">{{ p.difficulty }}</span>
+        <span class="chip">Time {{ p.complexity.time }}</span>
+        <span class="chip">Space {{ p.complexity.space }}</span>
+      </div>
+      <p class="statement">{{ p.statement }}</p>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT — the animation -->
+      <div class="viz">
+        <div class="stage">
+          <am-tree-canvas [root]="p.input" [nodeStates]="nodeStates()" />
+        </div>
+
+        <p class="caption" [class.caption--done]="isDone()">{{ note() }}</p>
+
+        <div class="progress"><div class="progress__bar" [style.width.%]="pct()"></div></div>
+
+        <div class="controls">
+          <button class="btn" (click)="restart()" title="Restart">⟲</button>
+          <button class="btn" (click)="prev()" [disabled]="atStart()">‹ Prev</button>
+          <button class="btn btn--play" (click)="togglePlay()">
+            {{ playing() ? '❚❚ Pause' : (atEnd() ? '↻ Replay' : '▶ Play') }}
+          </button>
+          <button class="btn" (click)="next()" [disabled]="atEnd()">Next ›</button>
+          <label class="speed">
+            Speed
+            <select (change)="onSpeed($event)">
+              <option value="0.5">0.5×</option>
+              <option value="1" selected>1×</option>
+              <option value="2">2×</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="panels">
+          <div class="mini">
+            <span class="mini__label">Call stack</span>
+            <div class="stack">
+              @for (f of callStack(); track f.nodeId) {
+                <span class="frame">{{ f.label }}</span>
+              }
+              @if (callStack().length === 0) {
+                <span class="frame frame--empty">empty</span>
+              }
+            </div>
+          </div>
+
+          @if (varsEntries().length) {
+            <div class="mini">
+              <span class="mini__label">Variables</span>
+              <div class="vars">
+                @for (v of varsEntries(); track v[0]) {
+                  <span class="var"><b>{{ v[0] }}</b> = {{ v[1] }}</span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- RIGHT — words, then code -->
+      <div class="explain">
+        <div class="panel">
+          <div class="panel__title"><span class="num">1</span> Pseudocode</div>
+          <am-code-view [lines]="pseudocode()" [activeLine]="activeLine()" />
+        </div>
+
+        <div class="panel">
+          <div class="panel__title"><span class="num">2</span> Code</div>
+          @if (!revealCode()) {
+            <div class="gate">
+              <p>Pick a language to reveal the code — it highlights line-by-line in sync with the animation.</p>
+              <button class="lang-btn" (click)="pickLanguage()">JavaScript</button>
+              <span class="soon">Python · Java · C++ — soon</span>
+            </div>
+          } @else {
+            <div class="tabs"><button class="tab tab--active">JavaScript</button></div>
+            <am-code-view [lines]="codeLines()" [activeLine]="activeLine()" />
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+} @else {
+  <section class="missing">
+    <h2>Problem not found</h2>
+    <a routerLink="/">← Back to topics</a>
+  </section>
+}

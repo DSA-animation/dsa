@@ -1,30 +1,49 @@
-.shell {
-  max-width: 920px;
-  margin: 0 auto;
-  padding: 32px 16px 64px;
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffffcc;
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.shell__header {
-  text-align: center;
-  margin-bottom: 24px;
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+  text-decoration: none;
 
-  h1 {
-    margin: 0;
-    font-size: clamp(1.6rem, 4vw, 2.25rem);
-    letter-spacing: -0.02em;
+  &__play {
+    display: inline-grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 7px;
+    background: linear-gradient(135deg, #0ea5e9, #22c55e);
+    color: #fff;
+    font-size: 0.7rem;
   }
+}
 
+.tagline {
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+@media (max-width: 520px) {
   .tagline {
-    margin: 6px 0 0;
-    color: #64748b;
-    font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+    display: none;
   }
 }
 
-.canvas-card {
-  background: radial-gradient(120% 120% at 50% 0%, #0f172a 0%, #0b1120 100%);
-  border: 1px solid #1e293b;
-  border-radius: 16px;
-  padding: 24px 16px;
-  box-shadow: 0 10px 40px -12px rgba(2, 6, 23, 0.5);
+.outlet {
+  display: block;
 }

@@ -1,10 +1,10 @@
-<main class="shell">
-  <header class="shell__header">
-    <h1>TreeTrace</h1>
-    <p class="tagline">Stop memorizing tree problems. Watch the one pattern unfold.</p>
-  </header>
+<header class="topbar">
+  <a class="brand" routerLink="/">
+    <span class="brand__play">▶</span> AlgoMotion
+  </a>
+  <span class="tagline">Learn DSA by watching the pattern</span>
+</header>
 
-  <section class="canvas-card">
-    <tt-tree-canvas [root]="sampleTree()" />
-  </section>
+<main class="outlet">
+  <router-outlet />
 </main>

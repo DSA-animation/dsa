@@ -11,7 +11,7 @@
 }
 
 .edges line {
-  stroke: #64748b;
+  stroke: #475569;
   stroke-width: 2;
   stroke-linecap: round;
 }
@@ -19,17 +19,54 @@
 .node {
   circle {
     fill: #1e293b;
-    stroke: #38bdf8;
+    stroke: #475569;
     stroke-width: 2.5;
+    transition: fill 0.25s ease, stroke 0.25s ease;
   }
 
-  text {
-    fill: #f1f5f9;
-    font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  .val {
+    fill: #e2e8f0;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
     font-size: 17px;
     font-weight: 600;
     user-select: none;
   }
+}
+
+/* Currently entered node */
+.node--active circle {
+  fill: #0ea5e9;
+  stroke: #7dd3fc;
+}
+.node--active .val {
+  fill: #052233;
+}
+
+/* Waiting on its children */
+.node--recursing circle {
+  fill: #1e293b;
+  stroke: #38bdf8;
+}
+
+/* Computed — shows its return value */
+.node--returned circle {
+  fill: #15803d;
+  stroke: #4ade80;
+}
+.node--returned .val {
+  fill: #ecfdf5;
+}
+
+.badge-bg {
+  fill: #22c55e;
+  stroke: #052e16;
+  stroke-width: 1.5;
+}
+.badge-text {
+  fill: #052e16;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .empty {

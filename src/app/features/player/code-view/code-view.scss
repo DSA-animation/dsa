@@ -1,0 +1,42 @@
+:host {
+  display: block;
+}
+
+.code {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 13.5px;
+  line-height: 1.75;
+  background: #0b1120;
+  border-radius: 10px;
+  padding: 10px 0;
+  overflow-x: auto;
+}
+
+.line {
+  display: flex;
+  gap: 12px;
+  padding: 1px 14px;
+  border-left: 3px solid transparent;
+  transition: background 0.2s ease;
+}
+
+.line--active {
+  background: rgba(56, 189, 248, 0.16);
+  border-left-color: #38bdf8;
+}
+
+.ln {
+  color: #475569;
+  text-align: right;
+  min-width: 18px;
+  user-select: none;
+}
+
+.tx {
+  color: #cbd5e1;
+  white-space: pre;
+}
+
+.line--active .tx {
+  color: #f8fafc;
+}
