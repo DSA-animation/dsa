@@ -1,12 +1,15 @@
 :host {
   display: block;
   width: 100%;
+  height: 100%;
 }
 
+/* The SVG fills its bounded box; preserveAspectRatio="xMidYMid meet" scales the
+   whole tree to fit, centered — it never overflows or drives the page height. */
 .tree {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
   overflow: visible;
 }
 
@@ -33,7 +36,6 @@
   }
 }
 
-/* Currently entered node */
 .node--active circle {
   fill: #0ea5e9;
   stroke: #7dd3fc;
@@ -42,13 +44,11 @@
   fill: #052233;
 }
 
-/* Waiting on its children */
 .node--recursing circle {
   fill: #1e293b;
   stroke: #38bdf8;
 }
 
-/* Computed — shows its return value */
 .node--returned circle {
   fill: #15803d;
   stroke: #4ade80;
@@ -70,8 +70,10 @@
 }
 
 .empty {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  margin: 0;
   color: #94a3b8;
   font-style: italic;
-  text-align: center;
-  padding: 32px 0;
 }
