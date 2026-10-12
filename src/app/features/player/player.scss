@@ -505,17 +505,28 @@
 .langtabs {
   display: flex;
   gap: 4px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 .langtab {
   font: inherit;
   font-size: 0.8rem;
-  border: 1px solid #0b1120;
-  background: #0b1120;
-  color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #475569;
   border-radius: 7px;
   padding: 5px 12px;
   cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.langtab:hover {
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+.langtab.is-active {
+  background: #0b1120;
+  border-color: #0b1120;
+  color: #f8fafc;
 }
 
 .missing {

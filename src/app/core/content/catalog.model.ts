@@ -1,8 +1,8 @@
 import { LevelOrderValue, TreeNode } from '../tree/tree-node.model';
 import { TraceStep } from '../trace/step.model';
 
-/** Languages we author concrete code for. JavaScript first; others added by authoring one more array. */
-export type Language = 'javascript';
+/** Languages we author concrete code for. Each is line-aligned with the pseudocode. */
+export type Language = 'javascript' | 'python' | 'java' | 'cpp';
 
 export type Difficulty = 'Easy' | 'Medium' | 'Hard';
 

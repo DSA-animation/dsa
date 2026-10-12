@@ -56,7 +56,12 @@ export class Player {
   protected readonly playing = signal(false);
   protected readonly speed = signal(1);
   protected readonly language = signal<Language>('javascript');
-  protected readonly revealCode = signal(false);
+  protected readonly languages: { id: Language; label: string }[] = [
+    { id: 'javascript', label: 'JavaScript' },
+    { id: 'python', label: 'Python' },
+    { id: 'java', label: 'Java' },
+    { id: 'cpp', label: 'C++' },
+  ];
 
   // Right-pane tabs.
   protected readonly activeTab = signal<string>('pseudocode');
@@ -125,9 +130,8 @@ export class Player {
   protected onSpeed(e: Event): void {
     this.speed.set(Number((e.target as HTMLSelectElement).value));
   }
-  protected pickLanguage(): void {
-    this.language.set('javascript');
-    this.revealCode.set(true);
+  protected setLanguage(l: Language): void {
+    this.language.set(l);
   }
   protected setTab(id: string): void {
     this.activeTab.set(id);

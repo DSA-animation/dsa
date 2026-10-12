@@ -91,18 +91,15 @@
             </div>
           }
           @case ('code') {
-            @if (!revealCode()) {
-              <div class="gate">
-                <p>Pick a language to reveal the code — it highlights in sync with the animation.</p>
-                <button class="lang-btn" (click)="pickLanguage()">JavaScript</button>
-                <span class="soon">Python · Java · C++ — soon</span>
+            <div class="tabpad">
+              <div class="langtabs">
+                @for (l of languages; track l.id) {
+                  <button class="langtab" [class.is-active]="language() === l.id" (click)="setLanguage(l.id)">{{ l.label }}</button>
+                }
               </div>
-            } @else {
-              <div class="tabpad">
-                <div class="langtabs"><button class="langtab is-active">JavaScript</button></div>
-                <am-code-view [lines]="codeLines()" [activeLine]="activeLine()" />
-              </div>
-            }
+              <p class="hint">Same logic in every language — highlights line-by-line as the animation plays.</p>
+              <am-code-view [lines]="codeLines()" [activeLine]="activeLine()" />
+            </div>
           }
           @case ('approach') {
             <div class="tabpad prose">
