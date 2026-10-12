@@ -1,0 +1,40 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.tree {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.edges line {
+  stroke: #64748b;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.node {
+  circle {
+    fill: #1e293b;
+    stroke: #38bdf8;
+    stroke-width: 2.5;
+  }
+
+  text {
+    fill: #f1f5f9;
+    font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 17px;
+    font-weight: 600;
+    user-select: none;
+  }
+}
+
+.empty {
+  color: #94a3b8;
+  font-style: italic;
+  text-align: center;
+  padding: 32px 0;
+}
