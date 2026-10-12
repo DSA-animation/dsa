@@ -19,8 +19,11 @@
         @if (p.companies.length) {
           <div class="companies">
             <span class="companies__label">Asked at</span>
-            @for (c of p.companies; track c) { <span class="company">{{ c }}</span> }
+            @for (c of p.companies; track c.name) {
+              <span class="company">{{ c.name }} <em>{{ c.level }}</em></span>
+            }
           </div>
+          <p class="exp-note">{{ p.experienceNote }}</p>
         }
       </div>
 

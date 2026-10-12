@@ -113,6 +113,23 @@
   border: 1px solid #e9d5ff;
   border-radius: 6px;
   padding: 2px 8px;
+
+  em {
+    font-style: normal;
+    font-weight: 500;
+    color: #8b5cf6;
+    margin-left: 5px;
+    padding-left: 5px;
+    border-left: 1px solid #e9d5ff;
+  }
+}
+.exp-note {
+  margin: 7px 2px 0;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-style: italic;
+  line-height: 1.4;
+  max-width: 62ch;
 }
 
 /* ---- Segmented controls ---- */

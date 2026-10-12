@@ -6,6 +6,13 @@ export type Language = 'javascript' | 'python' | 'java' | 'cpp';
 
 export type Difficulty = 'Easy' | 'Medium' | 'Hard';
 
+/** A company tag with the typical experience level at which this problem appears there. */
+export interface CompanyTag {
+  name: string;
+  /** Typical years-of-experience band / level (a guide — per-question YOE isn't published). */
+  level: string;
+}
+
 /** One input the learner can run any approach on — including deliberate edge cases. */
 export interface TestCase {
   id: string;
@@ -70,7 +77,9 @@ export interface Problem {
   leetcode?: number;
   statement: string;
   /** Companies this problem is commonly reported to be asked at (curated; LeetCode's exact tags are paywalled). */
-  companies: string[];
+  companies: CompanyTag[];
+  /** Honest note on the experience level this problem targets (per-question YOE isn't published). */
+  experienceNote: string;
 
   // ---- Shared interview-prep content (sourced from the learner's own notes) ----
   /** The one insight that unlocks the problem. */

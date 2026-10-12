@@ -283,7 +283,18 @@ export const maxDepthProblem: Problem = {
   leetcode: 104,
   statement:
     'Given the root of a binary tree, return its maximum depth — the number of nodes along the longest path from the root down to the farthest leaf.',
-  companies: ['Amazon', 'Microsoft', 'Google', 'Meta', 'Apple', 'Bloomberg', 'Adobe', 'LinkedIn'],
+  companies: [
+    { name: 'Amazon', level: '0–5 yrs' },
+    { name: 'Microsoft', level: '0–5 yrs' },
+    { name: 'Google', level: '0–5 yrs' },
+    { name: 'Meta', level: '0–5 yrs' },
+    { name: 'Apple', level: '0–5 yrs' },
+    { name: 'Bloomberg', level: '0–5 yrs' },
+    { name: 'Adobe', level: '0–5 yrs' },
+    { name: 'LinkedIn', level: '0–5 yrs' },
+  ],
+  experienceNote:
+    "Difficulty sets the level: this is an Easy problem, so it's a phone-screen warm-up asked broadly from new-grad to mid-level (~0–5 yrs) — and a quick opener even in senior loops, where the real test is the follow-ups.",
   keyRealization:
     'A binary tree is a recursive object: every node is itself the root of a smaller tree. So any question about "the whole tree" can usually be answered by asking the SAME question of its two subtrees and combining the results.',
   interview: [
