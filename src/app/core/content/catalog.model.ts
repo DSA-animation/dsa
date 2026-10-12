@@ -21,6 +21,8 @@ export interface TestCase {
   why: string;
   levelOrder: LevelOrderValue[];
   expected: number | boolean;
+  /** An extra scalar input the algorithm needs, e.g. Path Sum's targetSum. */
+  arg?: number;
   isEdge?: boolean;
 }
 
@@ -69,8 +71,8 @@ export interface Solution {
    * highlights on pseudocode line i (identity) — fine when the code lines up 1:1.
    */
   codeMap?: Partial<Record<Language, number[]>>;
-  /** Instrumented reference implementation → the trace the player animates. */
-  buildTrace: (root: TreeNode | null) => TraceStep[];
+  /** Instrumented reference implementation → the trace the player animates. `arg` is the test case's optional scalar (e.g. targetSum). */
+  buildTrace: (root: TreeNode | null, arg?: number) => TraceStep[];
 }
 
 /** A fully-authored, playable problem with its interview-prep content. */

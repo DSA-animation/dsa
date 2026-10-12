@@ -48,7 +48,7 @@ export class Player {
   // The trace for the selected approach + case.
   protected readonly steps = computed(() => {
     const sol = this.currentSolution();
-    return sol ? sol.buildTrace(this.currentTree()) : [];
+    return sol ? sol.buildTrace(this.currentTree(), this.currentCase()?.arg) : [];
   });
 
   // Playback state.

@@ -2,6 +2,7 @@ import { balancedProblem } from '../../content/trees/balanced';
 import { diameterProblem } from '../../content/trees/diameter';
 import { maxDepthProblem } from '../../content/trees/max-depth';
 import { minDepthProblem } from '../../content/trees/min-depth';
+import { pathSumProblem } from '../../content/trees/path-sum';
 import { DataStructure, Pattern, Problem } from './catalog.model';
 
 /**
@@ -47,8 +48,8 @@ export const PATTERNS: Record<string, Pattern> = {
     dsId: 'trees',
     title: 'Top-down (accumulator)',
     blurb: 'Carry a running value down each path.',
-    problemIds: [],
-    comingSoon: ['Path Sum'],
+    problemIds: ['path-sum'],
+    comingSoon: [],
   },
 };
 
@@ -57,6 +58,7 @@ export const PROBLEMS: Record<string, Problem> = {
   'minimum-depth': minDepthProblem,
   'diameter-of-binary-tree': diameterProblem,
   'balanced-binary-tree': balancedProblem,
+  'path-sum': pathSumProblem,
 };
 
 export const getDataStructure = (id: string): DataStructure | undefined =>
