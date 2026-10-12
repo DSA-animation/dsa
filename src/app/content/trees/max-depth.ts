@@ -287,37 +287,45 @@ export const maxDepthProblem: Problem = {
     'A binary tree is a recursive object: every node is itself the root of a smaller tree. So any question about "the whole tree" can usually be answered by asking the SAME question of its two subtrees and combining the results.',
   interview: [
     {
-      heading: 'Opening & clarifying',
+      heading: 'Clarifying the problem',
       exchanges: [
         {
-          interviewer: "Here's a warm-up. Given the root of a binary tree, return its maximum depth. Before you write anything — any questions for me?",
-          candidate: "A few. When you say depth, do you mean the number of nodes on the longest root-to-leaf path, or the number of edges? I'll assume nodes, so a single node is depth 1 — let me know if you meant edges. And what should an empty tree return? I'll go with 0.",
+          interviewer: "Let's do a tree problem. Given the root of a binary tree, return its maximum depth. Go ahead whenever you're ready.",
+          candidate: "Okay. Before I start, a couple of quick clarifications. By depth, do you mean the number of nodes on the longest root-to-leaf path, or the number of edges? I've seen it defined both ways.",
         },
         {
-          interviewer: "Nodes, yes, and empty is 0. It's a plain binary tree — no BST ordering, no balance guarantee.",
-          candidate: "Got it. One more: how large can the tree get, and could it be skewed? If it can be very deep, that changes whether I lean recursive or iterative.",
+          interviewer: 'Number of nodes. So a single node is depth one.',
+          candidate: "Got it. And for an empty tree I'll return zero — is that the convention you want?",
         },
         {
-          interviewer: 'Assume up to about 100,000 nodes, and it might be skewed.',
-          candidate: "Then I'll write the clean recursive version first, but keep recursion depth in mind and have an iterative version ready.",
+          interviewer: 'Yep, zero for empty.',
+          candidate: 'Last thing: any constraints on size? Could it be very large, or very unbalanced — like a straight line?',
+        },
+        {
+          interviewer: 'Assume it can be large — up to about 10^5 nodes — and yes, it might be a straight line.',
+          candidate: "Okay, that's useful. That tells me to watch the recursion depth, but let me start with the clean recursive version and we can harden it after.",
         },
       ],
     },
     {
-      heading: 'The approach',
+      heading: 'Approach',
       exchanges: [
         {
-          interviewer: "Good. What's your approach?",
-          candidate: "I'll follow the tree's own structure with recursion. A node's depth is 1 plus the max of its two children's depths, and an empty subtree has depth 0. That's a post-order DFS — I need both children's answers before I can compute mine. There's no meaningful brute force to skip past: any correct solution has to visit every node, so we're at Ω(n) regardless.",
+          interviewer: "Sure. What's your approach?",
+          candidate: "My first instinct is recursion. A node's depth is one plus the deeper of its two children's depths, and an empty subtree is zero. So I recurse on both children and combine.",
+        },
+        {
+          interviewer: 'Why recursion?',
+          candidate: "A tree is naturally recursive — each child is a smaller version of the same problem — so the solution falls right out of the definition. And there's nothing faster to reach for: I have to look at every node either way, so any correct solution is O(n).",
         },
       ],
     },
     {
-      heading: 'Writing the code',
+      heading: 'Coding it',
       exchanges: [
         {
-          interviewer: 'Go ahead and write the recursive version.',
-          candidate: "`if (node === null) return 0;` handles the base case, then `return 1 + Math.max(maxDepth(node.left), maxDepth(node.right));`. The +1 counts the current node, and I keep the deeper subtree. I'd dry-run a small tree to confirm the leaves return 1 and the values bubble up to the root.",
+          interviewer: 'Alright, go ahead and code it.',
+          candidate: 'If the node is null, return zero. Otherwise left = maxDepth(node.left), right = maxDepth(node.right), and I return one plus the max of the two. Let me trace a leaf quickly — both children are null, so it is one plus max(0, 0), which is one. Good.',
         },
       ],
     },
@@ -325,12 +333,16 @@ export const maxDepthProblem: Problem = {
       heading: 'Complexity',
       exchanges: [
         {
-          interviewer: 'What are the time and space complexities?',
-          candidate: "Time is O(n) — every node once, and that's optimal because any correct algorithm has to inspect them all. Space is O(h), the height, since at the deepest point every ancestor's frame is still on the call stack: O(log n) if it's balanced, but O(n) if it's skewed.",
+          interviewer: "What's the complexity?",
+          candidate: 'Time is O(n) — I touch each node once. Space is O(h), the height of the tree, because of the recursion stack.',
         },
         {
-          interviewer: 'Most candidates just say O(n). So the skewed case bothers you?',
-          candidate: "It does. At 100,000 nodes with a possible skew, the recursive version in JavaScript could throw “Maximum call stack size exceeded” — JS stacks are only around 10^4 frames deep. That's exactly when I'd switch to an iterative approach.",
+          interviewer: 'Not O(1)?',
+          candidate: "No. At the deepest point, every ancestor's call is still on the stack, so the memory is proportional to the height. For a balanced tree that's O(log n), but for a skewed one it's O(n).",
+        },
+        {
+          interviewer: 'You mentioned it could be a straight line, 10^5 nodes. Does that worry you?',
+          candidate: "Honestly, yes. In JavaScript the call stack is only around ten thousand frames, so a 100,000-deep recursion would overflow. For that input I'd switch to an iterative version.",
         },
       ],
     },
@@ -338,42 +350,42 @@ export const maxDepthProblem: Problem = {
       heading: 'Follow-up: without recursion',
       exchanges: [
         {
-          interviewer: "Let's see the iterative version.",
-          candidate: "I'll use BFS and count levels. The current level starts as just the root. While it's non-empty, I increment a depth counter, build the next level from all the children of the current level, and swap. When nothing's left, the counter is the number of levels — the max depth.",
+          interviewer: 'Okay — show me the iterative one.',
+          candidate: "I'll do BFS and count levels. I start with the root as the current level. Each round I increment a depth counter, build the next level from all the children of the current one, and move to it. When there's nothing left, the counter is the answer.",
         },
         {
-          interviewer: 'Careful with the queue — any performance trap there?',
-          candidate: "Yes: if I dequeued with array.shift(), that's O(n) because it re-indexes the array, and the whole thing becomes O(n²). I avoid it by building each level into a fresh array, or using a head pointer. That keeps it O(n) time, and space is O(w), the max width — O(1) on a skewed tree, up to O(n) on a wide one.",
+          interviewer: 'How are you doing the queue?',
+          candidate: "I'd build each level into a fresh array rather than calling shift — shift on an array is O(n) because it reindexes everything, which would make the whole thing O(n²). Level-by-level keeps it O(n) time, and the space is O(w), the width of the widest level.",
         },
         {
-          interviewer: 'So which do you ship — recursion or BFS?',
-          candidate: "It depends on shape: recursion's O(h) is better on balanced trees, BFS's O(w) is better on skewed ones. Since you said it could be large and skewed, I'd ship the BFS version for stack safety and mention recursion as the cleaner default.",
-        },
-      ],
-    },
-    {
-      heading: 'Follow-ups: variations',
-      exchanges: [
-        {
-          interviewer: 'Suppose I asked for the minimum depth instead. Same code with min?',
-          candidate: "No — that's the classic trap. A null child isn't a path end, so taking min(left, right) blindly would give a node with one child a wrong answer of 1. I'd guard the single-child case and recurse into the non-null side. max and min aren't symmetric here.",
-        },
-        {
-          interviewer: 'And if I wanted the diameter of the tree?',
-          candidate: "That's where the return value and the answer split. The helper still returns height, but I keep a running max of left height + right height — the path that bends at each node — in a side variable, and return that at the end.",
-        },
-        {
-          interviewer: 'You clearly see the pattern.',
-          candidate: "Right — it's the post-order “combine the children's answers” shape. The same skeleton solves Balanced, Path Sum, Count Nodes, and Lowest Common Ancestor; I only change what I return and how I combine.",
+          interviewer: 'So which of the two would you actually submit?',
+          candidate: "Given you said it might be a tall, skinny tree, I'd submit the iterative one for safety. If I knew it was always balanced I'd prefer the recursion — it's shorter, and its O(h) space is actually smaller than the queue in that case.",
         },
       ],
     },
     {
-      heading: 'Wrap-up',
+      heading: 'Follow-up: a twist',
       exchanges: [
         {
-          interviewer: 'Before you call it done — what would you test?',
-          candidate: "Empty tree → 0, single node → 1, a fully skewed chain to confirm the depth equals n and that the iterative version doesn't overflow, and a balanced tree. I'd dry-run at least the empty and skewed cases out loud.",
+          interviewer: 'Let me change it slightly. Minimum depth instead — can you just swap max for min?',
+          candidate: "Tempting, but that breaks. If a node has only one child, min of the two sides picks the null side, which is zero, so you'd report a path that doesn't actually reach a leaf. I'd special-case the single-child node and only recurse into the side that exists. Min and max aren't symmetric here.",
+        },
+        {
+          interviewer: 'Good catch. And if I asked for the diameter of the tree?',
+          candidate: "That's a nice one — it's the first time what I return and what I'm answering come apart. The helper still returns the height, but I keep a separate running max of left-height plus right-height — the longest path that bends at a node — and return that at the end.",
+        },
+      ],
+    },
+    {
+      heading: 'Wrapping up',
+      exchanges: [
+        {
+          interviewer: 'Before we wrap — how would you test it?',
+          candidate: "Empty tree, single node, a fully skewed chain, and a balanced one. I'd pay special attention to the skewed case, since that's exactly where the recursive version would have overflowed.",
+        },
+        {
+          interviewer: "Great — that's what I was looking for.",
+          candidate: "Thanks. If we had more time I'd point out this is the post-order 'combine the children's answers' shape — the same skeleton solves diameter, balanced, path sum, and lowest common ancestor. I'd just change what I return and how I combine.",
         },
       ],
     },
