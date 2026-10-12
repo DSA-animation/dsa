@@ -90,6 +90,31 @@
   background: #dcfce7;
 }
 
+.companies {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+
+  &__label {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    margin-right: 2px;
+  }
+}
+.company {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #7c3aed;
+  background: #f5f3ff;
+  border: 1px solid #e9d5ff;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+
 /* ---- Segmented controls ---- */
 .segrow {
   display: flex;

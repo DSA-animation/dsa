@@ -16,6 +16,12 @@
           <span class="chip">{{ currentSolution()?.complexity?.time }} time</span>
           <span class="chip">{{ currentSolution()?.complexity?.space }} space</span>
         </div>
+        @if (p.companies.length) {
+          <div class="companies">
+            <span class="companies__label">Asked at</span>
+            @for (c of p.companies; track c) { <span class="company">{{ c }}</span> }
+          </div>
+        }
       </div>
 
       <div class="segrow">

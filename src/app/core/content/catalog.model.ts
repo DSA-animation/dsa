@@ -69,6 +69,8 @@ export interface Problem {
   difficulty: Difficulty;
   leetcode?: number;
   statement: string;
+  /** Companies this problem is commonly reported to be asked at (curated; LeetCode's exact tags are paywalled). */
+  companies: string[];
 
   // ---- Shared interview-prep content (sourced from the learner's own notes) ----
   /** The one insight that unlocks the problem. */
