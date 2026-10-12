@@ -6,7 +6,7 @@ export type Language = 'javascript';
 
 export type Difficulty = 'Easy' | 'Medium' | 'Hard';
 
-/** One input the learner can run the animation on — including deliberate edge cases. */
+/** One input the learner can run any approach on — including deliberate edge cases. */
 export interface TestCase {
   id: string;
   label: string;
@@ -23,12 +23,35 @@ export interface FollowUp {
   a: string;
 }
 
-/** The reusable Recursion Recipe, filled per problem. */
+/** The reusable Recursion Recipe, filled per recursive approach. */
 export interface RecursionRecipe {
   contract: string;
   baseCase: string;
   recurse: string;
   combine: string;
+}
+
+/**
+ * One way to solve the problem. A problem holds several of these, because in a
+ * real interview the candidate explores approaches (brute force, recursion,
+ * iterative) rather than jumping straight to the optimal one.
+ */
+export interface Solution {
+  id: string;
+  name: string; // "Recursive DFS (post-order)"
+  tagline: string; // one-line pitch
+  /** Label for the auxiliary-structure panel: "Call stack" for recursion, "Queue" for BFS. */
+  auxLabel: string;
+  complexity: { time: string; timeWhy: string; space: string; spaceWhy: string };
+  /** How you'd reason your way to THIS approach at a whiteboard. */
+  approach: string[];
+  /** Only for recursive approaches. */
+  recipe?: RecursionRecipe;
+  /** Pseudocode lines; index aligns with each language's code lines and with `TraceStep.line`. */
+  pseudocode: string[];
+  code: Record<Language, string[]>;
+  /** Instrumented reference implementation → the trace the player animates. */
+  buildTrace: (root: TreeNode | null) => TraceStep[];
 }
 
 /** A fully-authored, playable problem with its interview-prep content. */
@@ -40,30 +63,20 @@ export interface Problem {
   difficulty: Difficulty;
   leetcode?: number;
   statement: string;
-  complexity: { time: string; timeWhy: string; space: string; spaceWhy: string };
 
-  // ---- Interview-prep content (sourced from the learner's own notes) ----
+  // ---- Shared interview-prep content (sourced from the learner's own notes) ----
   /** The one insight that unlocks the problem. */
   keyRealization: string;
-  /** The whiteboard reasoning that arrives at the solution cold. */
-  approach: string[];
-  /** Contract / base / recurse / combine. */
-  recipe: RecursionRecipe;
   /** How top-company interviewers grill you on this problem. */
   followUps: FollowUp[];
   /** The transferable pattern this problem teaches. */
   transferable: string;
 
-  // ---- Code ----
-  /** Pseudocode lines; index aligns with each language's code lines and with `TraceStep.line`. */
-  pseudocode: string[];
-  code: Record<Language, string[]>;
-
-  // ---- Inputs ----
+  // ---- Inputs (shared across approaches) ----
   testCases: TestCase[];
 
-  /** Instrumented reference solution → the trace the player animates for a given input. */
-  buildTrace: (root: TreeNode | null) => TraceStep[];
+  // ---- Approaches ----
+  solutions: Solution[];
 }
 
 /** A pattern groups problems that are solved the same way. */

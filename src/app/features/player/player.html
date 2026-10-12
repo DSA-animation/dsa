@@ -1,183 +1,152 @@
 @if (problemData(); as p) {
-  <section class="player">
-    <nav class="crumbs">
-      <a routerLink="/">Topics</a><span class="sep">/</span>
-      <a [routerLink]="['/learn', ds()]">{{ dsData()?.title || ds() }}</a><span class="sep">/</span>
-      <a [routerLink]="['/learn', ds(), pattern()]">{{ patternData()?.title || pattern() }}</a>
-    </nav>
+  <section class="ws">
+    <!-- LEFT: visualization -->
+    <div class="pane pane--viz">
+      <nav class="crumbs">
+        <a routerLink="/">Topics</a><span class="sep">/</span>
+        <a [routerLink]="['/learn', ds()]">{{ dsData()?.title || ds() }}</a><span class="sep">/</span>
+        <a [routerLink]="['/learn', ds(), pattern()]">{{ patternData()?.title || pattern() }}</a>
+      </nav>
 
-    <header class="phead">
-      <h1>{{ p.title }}</h1>
-      <div class="chips">
-        <span class="chip chip--diff">{{ p.difficulty }}</span>
-        @if (p.leetcode) { <span class="chip">LeetCode {{ p.leetcode }}</span> }
-        <span class="chip">Time {{ p.complexity.time }}</span>
-        <span class="chip">Space {{ p.complexity.space }}</span>
-      </div>
-      <p class="statement">{{ p.statement }}</p>
-    </header>
-
-    <div class="realization">
-      <span class="realization__tag">The one realization</span>
-      <p>{{ p.keyRealization }}</p>
-    </div>
-
-    <div class="cases">
-      <span class="cases__label">Test cases</span>
-      @for (c of testCases(); track c.id) {
-        <button class="case" [class.case--active]="c.id === currentCase()?.id" (click)="selectCase(c.id)">
-          {{ c.label }} <span class="case__exp">→ {{ c.expected }}</span>
-          @if (c.isEdge) { <span class="case__edge">edge</span> }
-        </button>
-      }
-    </div>
-    <p class="case-why">{{ currentCase()?.why }}</p>
-
-    <!-- HERO: animation + whiteboard explanation -->
-    <div class="hero">
-      <div class="stage-wrap">
-        <div class="stage">
-          <am-tree-canvas [root]="currentTree()" [nodeStates]="nodeStates()" />
-        </div>
-        <div class="progress"><div class="progress__bar" [style.width.%]="pct()"></div></div>
-        <div class="controls">
-          <button class="btn" (click)="restart()" title="Restart">⟲</button>
-          <button class="btn" (click)="prev()" [disabled]="atStart()">‹ Prev</button>
-          <button class="btn btn--play" (click)="togglePlay()">
-            {{ playing() ? '❚❚ Pause' : (atEnd() ? '↻ Replay' : '▶ Play') }}
-          </button>
-          <button class="btn" (click)="next()" [disabled]="atEnd()">Next ›</button>
-          <label class="speed">
-            Speed
-            <select (change)="onSpeed($event)">
-              <option value="0.5">0.5×</option>
-              <option value="1" selected>1×</option>
-              <option value="2">2×</option>
-            </select>
-          </label>
+      <div class="vhead">
+        <h1>{{ p.title }}</h1>
+        <div class="chips">
+          <span class="chip chip--diff">{{ p.difficulty }}</span>
+          @if (p.leetcode) { <span class="chip">LC {{ p.leetcode }}</span> }
+          <span class="chip">{{ currentSolution()?.complexity?.time }} time</span>
+          <span class="chip">{{ currentSolution()?.complexity?.space }} space</span>
         </div>
       </div>
 
-      <aside class="whiteboard">
-        <div class="wb-head">Step-by-step explanation</div>
-        <p class="wb-note" [class.wb-note--done]="isDone()">{{ note() }}</p>
-
-        <div class="wb-sub">
-          <span class="wb-sub__label">Call stack</span>
-          <div class="stack">
-            @for (f of callStack(); track f.nodeId) {
-              <span class="frame">{{ f.label }}</span>
-            }
-            @if (callStack().length === 0) {
-              <span class="frame frame--empty">empty</span>
-            }
-          </div>
+      <div class="segrow">
+        <span class="segrow__label">Approach</span>
+        <div class="seg">
+          @for (s of solutions(); track s.id) {
+            <button class="seg__btn" [class.is-active]="s.id === currentSolution()?.id" (click)="selectSolution(s.id)">{{ s.name }}</button>
+          }
         </div>
+      </div>
+      <div class="segrow">
+        <span class="segrow__label">Test case</span>
+        <div class="seg seg--wrap">
+          @for (c of testCases(); track c.id) {
+            <button class="seg__btn" [class.is-active]="c.id === currentCase()?.id" (click)="selectCase(c.id)">
+              {{ c.label }} <span class="seg__exp">{{ c.expected }}</span>
+            </button>
+          }
+        </div>
+      </div>
 
-        @if (varsEntries().length) {
-          <div class="wb-sub">
-            <span class="wb-sub__label">Values</span>
-            <div class="vars">
-              @for (v of varsEntries(); track v[0]) {
-                <span class="var"><b>{{ v[0] }}</b> = {{ v[1] }}</span>
-              }
+      <div class="stage">
+        <am-tree-canvas [root]="currentTree()" [nodeStates]="nodeStates()" />
+      </div>
+
+      <div class="progress"><div class="progress__bar" [style.width.%]="pct()"></div></div>
+
+      <div class="controls">
+        <button class="btn" (click)="restart()" title="Restart">⟲</button>
+        <button class="btn" (click)="prev()" [disabled]="atStart()" title="Previous">‹</button>
+        <button class="btn btn--play" (click)="togglePlay()">{{ playing() ? '❚❚ Pause' : (atEnd() ? '↻ Replay' : '▶ Play') }}</button>
+        <button class="btn" (click)="next()" [disabled]="atEnd()" title="Next">›</button>
+        <label class="speed">Speed
+          <select (change)="onSpeed($event)">
+            <option value="0.5">0.5×</option>
+            <option value="1" selected>1×</option>
+            <option value="2">2×</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="now">
+        <p class="now__note" [class.now__note--done]="isDone()">{{ note() }}</p>
+        <div class="now__state">
+          <span class="now__chip now__chip--aux">
+            <em>{{ auxLabel() }}</em>
+            @for (f of aux(); track f.nodeId) { <b>{{ f.label }}</b> }
+            @if (!aux().length) { <b class="is-empty">empty</b> }
+          </span>
+          @for (v of varsEntries(); track v[0]) {
+            <span class="now__chip"><em>{{ v[0] }}</em> {{ v[1] }}</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: tabbed reference -->
+    <div class="pane pane--info">
+      <div class="tabbar">
+        <button [class.is-active]="activeTab() === 'pseudocode'" (click)="setTab('pseudocode')">Pseudocode</button>
+        <button [class.is-active]="activeTab() === 'code'" (click)="setTab('code')">Code</button>
+        <button [class.is-active]="activeTab() === 'approach'" (click)="setTab('approach')">Approach</button>
+        <button [class.is-active]="activeTab() === 'complexity'" (click)="setTab('complexity')">Complexity</button>
+        <button [class.is-active]="activeTab() === 'followups'" (click)="setTab('followups')">Follow-ups</button>
+      </div>
+
+      <div class="tabbody">
+        @switch (activeTab()) {
+          @case ('pseudocode') {
+            <div class="tabpad">
+              <p class="hint">Highlights line-by-line as the animation plays.</p>
+              <am-code-view [lines]="pseudocode()" [activeLine]="activeLine()" />
             </div>
-          </div>
-        }
-      </aside>
-    </div>
-
-    <!-- Pseudocode + code BELOW the animation -->
-    <div class="codes">
-      <div class="panel">
-        <div class="panel__title"><span class="num">1</span> Pseudocode</div>
-        <am-code-view [lines]="pseudocode()" [activeLine]="activeLine()" />
-      </div>
-      <div class="panel">
-        <div class="panel__title"><span class="num">2</span> Code</div>
-        @if (!revealCode()) {
-          <div class="gate">
-            <p>Pick a language to reveal the code — it highlights line-by-line in sync with the animation above.</p>
-            <button class="lang-btn" (click)="pickLanguage()">JavaScript</button>
-            <span class="soon">Python · Java · C++ — soon</span>
-          </div>
-        } @else {
-          <div class="tabs"><button class="tab tab--active">JavaScript</button></div>
-          <am-code-view [lines]="codeLines()" [activeLine]="activeLine()" />
-        }
-      </div>
-    </div>
-
-    <!-- Interview prep -->
-    <section class="prep">
-      <h2 class="prep__h">Interview prep</h2>
-
-      <div class="acc">
-        <button class="acc__head" (click)="toggleSection('approach')" [class.is-open]="openSection() === 'approach'">
-          <span>How to approach it — arriving at the solution cold</span><span class="chev">⌄</span>
-        </button>
-        @if (openSection() === 'approach') {
-          <div class="acc__body">
-            <ol class="approach">
-              @for (a of p.approach; track $index) { <li>{{ a }}</li> }
-            </ol>
-          </div>
-        }
-      </div>
-
-      <div class="acc">
-        <button class="acc__head" (click)="toggleSection('recipe')" [class.is-open]="openSection() === 'recipe'">
-          <span>The Recursion Recipe</span><span class="chev">⌄</span>
-        </button>
-        @if (openSection() === 'recipe') {
-          <div class="acc__body">
-            <table class="recipe">
-              <tr><th>Contract</th><td>{{ p.recipe.contract }}</td></tr>
-              <tr><th>Base case</th><td>{{ p.recipe.baseCase }}</td></tr>
-              <tr><th>Recurse on smaller</th><td>{{ p.recipe.recurse }}</td></tr>
-              <tr><th>Combine</th><td>{{ p.recipe.combine }}</td></tr>
-            </table>
-          </div>
-        }
-      </div>
-
-      <div class="acc">
-        <button class="acc__head" (click)="toggleSection('complexity')" [class.is-open]="openSection() === 'complexity'">
-          <span>Complexity — and the senior answer on space</span><span class="chev">⌄</span>
-        </button>
-        @if (openSection() === 'complexity') {
-          <div class="acc__body">
-            <p><b>Time {{ p.complexity.time }}</b> — {{ p.complexity.timeWhy }}</p>
-            <p><b>Space {{ p.complexity.space }}</b> — {{ p.complexity.spaceWhy }}</p>
-          </div>
-        }
-      </div>
-
-      <div class="acc">
-        <button class="acc__head" (click)="toggleSection('grill')" [class.is-open]="openSection() === 'grill'">
-          <span>How top interviewers grill you</span><span class="chev">⌄</span>
-        </button>
-        @if (openSection() === 'grill') {
-          <div class="acc__body">
-            @for (f of p.followUps; track $index) {
-              <div class="qa">
-                <p class="qa__q">“{{ f.q }}”</p>
-                <p class="qa__a">{{ f.a }}</p>
+          }
+          @case ('code') {
+            @if (!revealCode()) {
+              <div class="gate">
+                <p>Pick a language to reveal the code — it highlights in sync with the animation.</p>
+                <button class="lang-btn" (click)="pickLanguage()">JavaScript</button>
+                <span class="soon">Python · Java · C++ — soon</span>
+              </div>
+            } @else {
+              <div class="tabpad">
+                <div class="langtabs"><button class="langtab is-active">JavaScript</button></div>
+                <am-code-view [lines]="codeLines()" [activeLine]="activeLine()" />
               </div>
             }
-          </div>
+          }
+          @case ('approach') {
+            <div class="tabpad prose">
+              <div class="realization">
+                <span class="realization__tag">Key realization</span>
+                <p>{{ p.keyRealization }}</p>
+              </div>
+              <h3>How to approach it — {{ currentSolution()?.name }}</h3>
+              <ol class="approach-list">
+                @for (a of currentSolution()?.approach ?? []; track $index) { <li>{{ a }}</li> }
+              </ol>
+              @if (currentSolution()?.recipe; as r) {
+                <h3>The Recursion Recipe</h3>
+                <table class="recipe">
+                  <tr><th>Contract</th><td>{{ r.contract }}</td></tr>
+                  <tr><th>Base case</th><td>{{ r.baseCase }}</td></tr>
+                  <tr><th>Recurse</th><td>{{ r.recurse }}</td></tr>
+                  <tr><th>Combine</th><td>{{ r.combine }}</td></tr>
+                </table>
+              }
+            </div>
+          }
+          @case ('complexity') {
+            @if (currentSolution()?.complexity; as cx) {
+              <div class="tabpad prose">
+                <h3>Complexity — {{ currentSolution()?.name }}</h3>
+                <p><b>Time {{ cx.time }}</b> — {{ cx.timeWhy }}</p>
+                <p><b>Space {{ cx.space }}</b> — {{ cx.spaceWhy }}</p>
+              </div>
+            }
+          }
+          @case ('followups') {
+            <div class="tabpad prose">
+              <h3>How top interviewers grill you</h3>
+              @for (f of p.followUps; track $index) {
+                <div class="qa"><p class="qa__q">“{{ f.q }}”</p><p class="qa__a">{{ f.a }}</p></div>
+              }
+              <h3>The transferable pattern</h3>
+              <p>{{ p.transferable }}</p>
+            </div>
+          }
         }
       </div>
-
-      <div class="acc">
-        <button class="acc__head" (click)="toggleSection('pattern')" [class.is-open]="openSection() === 'pattern'">
-          <span>The transferable pattern</span><span class="chev">⌄</span>
-        </button>
-        @if (openSection() === 'pattern') {
-          <div class="acc__body"><p>{{ p.transferable }}</p></div>
-        }
-      </div>
-    </section>
+    </div>
   </section>
 } @else {
   <section class="missing">

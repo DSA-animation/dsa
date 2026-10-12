@@ -7,10 +7,10 @@ import { TreeCanvas } from '../visualizer/tree-canvas/tree-canvas';
 import { CodeView } from './code-view/code-view';
 
 /**
- * The player: animation + synced whiteboard explanation on top, pseudocode/code
- * below, and the full interview-prep breakdown at the bottom. Every panel is a
- * pure function of one `currentStep` signal. Route params arrive via
- * `withComponentInputBinding`.
+ * The player: an interview-style workspace. Pick an APPROACH and a TEST CASE,
+ * then watch the animation + synced whiteboard explanation + pseudocode on top,
+ * the language-specific code below, and the full interview-prep breakdown at the
+ * bottom. Every panel is a pure function of one `currentStep` signal.
  */
 @Component({
   selector: 'am-player',
@@ -28,19 +28,27 @@ export class Player {
   protected readonly patternData = computed(() => getPattern(this.pattern()));
   protected readonly dsData = computed(() => getDataStructure(this.ds()));
 
+  // Approach (solution) selection.
+  protected readonly solutions = computed(() => this.problemData()?.solutions ?? []);
+  protected readonly selectedSolutionId = signal<string>('');
+  protected readonly currentSolution = computed(() => {
+    const sols = this.solutions();
+    return sols.find((s) => s.id === this.selectedSolutionId()) ?? sols[0];
+  });
+
   // Test-case selection.
-  protected readonly selectedCaseId = signal<string>('');
   protected readonly testCases = computed(() => this.problemData()?.testCases ?? []);
+  protected readonly selectedCaseId = signal<string>('');
   protected readonly currentCase = computed(() => {
     const cases = this.testCases();
     return cases.find((c) => c.id === this.selectedCaseId()) ?? cases[0];
   });
   protected readonly currentTree = computed(() => fromLevelOrder(this.currentCase()?.levelOrder ?? []));
 
-  // The trace for the selected case.
+  // The trace for the selected approach + case.
   protected readonly steps = computed(() => {
-    const p = this.problemData();
-    return p ? p.buildTrace(this.currentTree()) : [];
+    const sol = this.currentSolution();
+    return sol ? sol.buildTrace(this.currentTree()) : [];
   });
 
   // Playback state.
@@ -50,8 +58,8 @@ export class Player {
   protected readonly language = signal<Language>('javascript');
   protected readonly revealCode = signal(false);
 
-  // Interview-prep accordion.
-  protected readonly openSection = signal<string>('approach');
+  // Right-pane tabs.
+  protected readonly activeTab = signal<string>('pseudocode');
 
   // Derived view of the current step (clamped so a shorter new trace can't go out of range).
   protected readonly currentStep = computed(() => {
@@ -59,7 +67,8 @@ export class Player {
     return s[this.index()] ?? s[s.length - 1] ?? null;
   });
   protected readonly nodeStates = computed(() => this.currentStep()?.nodeStates ?? {});
-  protected readonly callStack = computed(() => this.currentStep()?.callStack ?? []);
+  protected readonly aux = computed(() => this.currentStep()?.callStack ?? []);
+  protected readonly auxLabel = computed(() => this.currentSolution()?.auxLabel ?? 'Call stack');
   protected readonly note = computed(() => this.currentStep()?.note ?? '');
   protected readonly activeLine = computed(() => this.currentStep()?.line ?? -1);
   protected readonly varsEntries = computed(() => Object.entries(this.currentStep()?.vars ?? {}));
@@ -71,8 +80,8 @@ export class Player {
     return total > 1 ? (this.index() / (total - 1)) * 100 : 0;
   });
 
-  protected readonly pseudocode = computed(() => this.problemData()?.pseudocode ?? []);
-  protected readonly codeLines = computed(() => this.problemData()?.code[this.language()] ?? []);
+  protected readonly pseudocode = computed(() => this.currentSolution()?.pseudocode ?? []);
+  protected readonly codeLines = computed(() => this.currentSolution()?.code[this.language()] ?? []);
 
   constructor() {
     effect((onCleanup) => {
@@ -86,9 +95,16 @@ export class Player {
     });
   }
 
-  protected selectCase(id: string): void {
+  private resetPlayback(): void {
     this.playing.set(false);
     this.index.set(0);
+  }
+  protected selectSolution(id: string): void {
+    this.resetPlayback();
+    this.selectedSolutionId.set(id);
+  }
+  protected selectCase(id: string): void {
+    this.resetPlayback();
     this.selectedCaseId.set(id);
   }
   protected togglePlay(): void {
@@ -104,8 +120,7 @@ export class Player {
     if (!this.atStart()) this.index.update((i) => i - 1);
   }
   protected restart(): void {
-    this.playing.set(false);
-    this.index.set(0);
+    this.resetPlayback();
   }
   protected onSpeed(e: Event): void {
     this.speed.set(Number((e.target as HTMLSelectElement).value));
@@ -114,7 +129,7 @@ export class Player {
     this.language.set('javascript');
     this.revealCode.set(true);
   }
-  protected toggleSection(id: string): void {
-    this.openSection.update((cur) => (cur === id ? '' : id));
+  protected setTab(id: string): void {
+    this.activeTab.set(id);
   }
 }
