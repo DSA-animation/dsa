@@ -2,13 +2,15 @@ import { ChangeDetectionStrategy, Component, computed, effect, input, signal } f
 import { RouterLink } from '@angular/router';
 import { getDataStructure, getPattern, getProblem } from '../../core/content/catalog';
 import { Language } from '../../core/content/catalog.model';
+import { fromLevelOrder } from '../../core/tree/tree-builder';
 import { TreeCanvas } from '../visualizer/tree-canvas/tree-canvas';
 import { CodeView } from './code-view/code-view';
 
 /**
- * The player: runs the trace for a problem and drives every panel (canvas,
- * call stack, variables, pseudocode, code) from a single `currentStep` signal.
- * Route params `ds`/`pattern`/`problem` arrive via `withComponentInputBinding`.
+ * The player: animation + synced whiteboard explanation on top, pseudocode/code
+ * below, and the full interview-prep breakdown at the bottom. Every panel is a
+ * pure function of one `currentStep` signal. Route params arrive via
+ * `withComponentInputBinding`.
  */
 @Component({
   selector: 'am-player',
@@ -18,18 +20,27 @@ import { CodeView } from './code-view/code-view';
   styleUrl: './player.scss',
 })
 export class Player {
-  // Route params.
   readonly ds = input<string>('');
   readonly pattern = input<string>('');
   readonly problem = input<string>('');
 
-  // Content.
   protected readonly problemData = computed(() => getProblem(this.problem()));
   protected readonly patternData = computed(() => getPattern(this.pattern()));
   protected readonly dsData = computed(() => getDataStructure(this.ds()));
+
+  // Test-case selection.
+  protected readonly selectedCaseId = signal<string>('');
+  protected readonly testCases = computed(() => this.problemData()?.testCases ?? []);
+  protected readonly currentCase = computed(() => {
+    const cases = this.testCases();
+    return cases.find((c) => c.id === this.selectedCaseId()) ?? cases[0];
+  });
+  protected readonly currentTree = computed(() => fromLevelOrder(this.currentCase()?.levelOrder ?? []));
+
+  // The trace for the selected case.
   protected readonly steps = computed(() => {
     const p = this.problemData();
-    return p ? p.buildTrace(p.input) : [];
+    return p ? p.buildTrace(this.currentTree()) : [];
   });
 
   // Playback state.
@@ -39,8 +50,14 @@ export class Player {
   protected readonly language = signal<Language>('javascript');
   protected readonly revealCode = signal(false);
 
-  // Derived view of the current step.
-  protected readonly currentStep = computed(() => this.steps()[this.index()] ?? null);
+  // Interview-prep accordion.
+  protected readonly openSection = signal<string>('approach');
+
+  // Derived view of the current step (clamped so a shorter new trace can't go out of range).
+  protected readonly currentStep = computed(() => {
+    const s = this.steps();
+    return s[this.index()] ?? s[s.length - 1] ?? null;
+  });
   protected readonly nodeStates = computed(() => this.currentStep()?.nodeStates ?? {});
   protected readonly callStack = computed(() => this.currentStep()?.callStack ?? []);
   protected readonly note = computed(() => this.currentStep()?.note ?? '');
@@ -58,21 +75,22 @@ export class Player {
   protected readonly codeLines = computed(() => this.problemData()?.code[this.language()] ?? []);
 
   constructor() {
-    // Auto-advance while playing; re-created when playing/speed change.
     effect((onCleanup) => {
       if (!this.playing()) return;
-      const ms = 1100 / this.speed();
+      const ms = 1200 / this.speed();
       const timer = setInterval(() => {
-        if (this.atEnd()) {
-          this.playing.set(false);
-        } else {
-          this.index.update((i) => i + 1);
-        }
+        if (this.atEnd()) this.playing.set(false);
+        else this.index.update((i) => i + 1);
       }, ms);
       onCleanup(() => clearInterval(timer));
     });
   }
 
+  protected selectCase(id: string): void {
+    this.playing.set(false);
+    this.index.set(0);
+    this.selectedCaseId.set(id);
+  }
   protected togglePlay(): void {
     if (this.atEnd()) this.index.set(0);
     this.playing.update((p) => !p);
@@ -95,5 +113,8 @@ export class Player {
   protected pickLanguage(): void {
     this.language.set('javascript');
     this.revealCode.set(true);
+  }
+  protected toggleSection(id: string): void {
+    this.openSection.update((cur) => (cur === id ? '' : id));
   }
 }
