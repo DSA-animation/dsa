@@ -420,6 +420,28 @@
   }
 }
 
+/* ---- Interview tab (sectioned, scrollable) ---- */
+.interview {
+  .isec {
+    margin-bottom: 22px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .isec:last-child {
+    border-bottom: none;
+  }
+  .isec__intro {
+    color: #64748b;
+    font-size: 0.86rem;
+    font-style: italic;
+    margin: -2px 0 12px;
+  }
+  .qa {
+    padding-left: 12px;
+    border-left: 2px solid #e2e8f0;
+  }
+}
+
 /* ---- Code gate / language tabs ---- */
 .gate {
   padding: 28px 18px;

@@ -17,10 +17,17 @@ export interface TestCase {
   isEdge?: boolean;
 }
 
-/** An interviewer follow-up and how to answer it. */
-export interface FollowUp {
+/** A single interview question + model answer. */
+export interface InterviewQA {
   q: string;
   a: string;
+}
+
+/** A themed group of interview probes (clarifying, complexity, edge cases, variations…). */
+export interface InterviewSection {
+  heading: string;
+  intro?: string;
+  qa: InterviewQA[];
 }
 
 /** The reusable Recursion Recipe, filled per recursive approach. */
@@ -67,10 +74,8 @@ export interface Problem {
   // ---- Shared interview-prep content (sourced from the learner's own notes) ----
   /** The one insight that unlocks the problem. */
   keyRealization: string;
-  /** How top-company interviewers grill you on this problem. */
-  followUps: FollowUp[];
-  /** The transferable pattern this problem teaches. */
-  transferable: string;
+  /** A comprehensive, Google-bar interview drill covering every aspect of the problem. */
+  interview: InterviewSection[];
 
   // ---- Inputs (shared across approaches) ----
   testCases: TestCase[];

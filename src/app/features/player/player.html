@@ -79,7 +79,7 @@
         <button [class.is-active]="activeTab() === 'code'" (click)="setTab('code')">Code</button>
         <button [class.is-active]="activeTab() === 'approach'" (click)="setTab('approach')">Approach</button>
         <button [class.is-active]="activeTab() === 'complexity'" (click)="setTab('complexity')">Complexity</button>
-        <button [class.is-active]="activeTab() === 'followups'" (click)="setTab('followups')">Follow-ups</button>
+        <button [class.is-active]="activeTab() === 'interview'" (click)="setTab('interview')">Interview</button>
       </div>
 
       <div class="tabbody">
@@ -134,14 +134,21 @@
               </div>
             }
           }
-          @case ('followups') {
-            <div class="tabpad prose">
-              <h3>How top interviewers grill you</h3>
-              @for (f of p.followUps; track $index) {
-                <div class="qa"><p class="qa__q">“{{ f.q }}”</p><p class="qa__a">{{ f.a }}</p></div>
+          @case ('interview') {
+            <div class="tabpad prose interview">
+              <p class="hint">Google-bar grilling — every angle an interviewer can take on this problem.</p>
+              @for (sec of p.interview; track sec.heading) {
+                <section class="isec">
+                  <h3>{{ sec.heading }}</h3>
+                  @if (sec.intro) { <p class="isec__intro">{{ sec.intro }}</p> }
+                  @for (item of sec.qa; track $index) {
+                    <div class="qa">
+                      <p class="qa__q">{{ item.q }}</p>
+                      <p class="qa__a">{{ item.a }}</p>
+                    </div>
+                  }
+                </section>
               }
-              <h3>The transferable pattern</h3>
-              <p>{{ p.transferable }}</p>
             </div>
           }
         }

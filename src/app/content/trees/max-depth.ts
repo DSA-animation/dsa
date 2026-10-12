@@ -227,30 +227,122 @@ export const maxDepthProblem: Problem = {
     'Given the root of a binary tree, return its maximum depth — the number of nodes along the longest path from the root down to the farthest leaf.',
   keyRealization:
     'A binary tree is a recursive object: every node is itself the root of a smaller tree. So any question about "the whole tree" can usually be answered by asking the SAME question of its two subtrees and combining the results.',
-  followUps: [
+  interview: [
     {
-      q: 'Do it without recursion.',
-      a: 'Switch to the Iterative BFS approach above — process the tree level by level and count the levels. It removes the O(h) call-stack risk on a skewed tree.',
+      heading: '1. Clarify before you code',
+      intro: 'Strong candidates spend the first 1–2 minutes here. Silence on these reads as inexperience.',
+      qa: [
+        {
+          q: 'Is "depth" the number of nodes or the number of edges on the longest path?',
+          a: 'Pin this down first. LeetCode 104 counts NODES, so a single node has depth 1. If the interviewer means edges, every answer is one less — a classic off-by-one. Never assume.',
+        },
+        {
+          q: 'What should an empty tree (root = null) return?',
+          a: 'By convention 0 — no nodes, no path. Confirming it also hands you your base case.',
+        },
+        {
+          q: 'Is it a plain binary tree or a BST? Any balance guarantee?',
+          a: "A plain binary tree — no ordering or balance to exploit. So you can't prune or binary-search; you must visit every node.",
+        },
+        {
+          q: 'How large can the tree be — could it be very deep or skewed?',
+          a: 'This question earns senior points. If n can reach ~10^5 or a long skewed chain, recursion depth becomes a real risk, which motivates the iterative approach before anyone forces it.',
+        },
+        {
+          q: 'Do the node values matter?',
+          a: 'No — depth depends only on structure. Saying so shows you understand the problem, not just the shape of the input.',
+        },
+      ],
     },
     {
-      q: 'In your BFS, what does array.shift() cost — and does it matter?',
-      a: 'A lot: array.shift() is O(n) because it re-indexes the whole array, so calling it once per node makes BFS O(n²). Keep it O(n) by building each new level into a fresh array (level → next, as shown), or by using a head pointer / real deque instead of shift().',
+      heading: '2. Approaches — propose and compare',
+      intro: 'There is no meaningful brute force: any correct answer must visit every node, so it is Ω(n). The real axis is recursion vs iteration.',
+      qa: [
+        {
+          q: "What's your first instinct, and why?",
+          a: "Recursive DFS, post-order: a node's depth = 1 + max(left depth, right depth). It mirrors the tree's own recursive structure, so it's the shortest to write and the easiest to defend.",
+        },
+        {
+          q: 'Now give me a solution without recursion.',
+          a: 'BFS level-count: process the tree one level at a time and increment a counter per level. (Alternative: iterative DFS with an explicit stack of (node, depth).) Both move the bookkeeping off the call stack.',
+        },
+        {
+          q: 'When would you actually pick BFS over recursion?',
+          a: 'When the tree can be deep/skewed and the language has a shallow call stack (JS blows up around ~10^4 frames). BFS trades the O(h) call stack for an O(width) queue — the safe choice on a linked-list-shaped tree.',
+        },
+      ],
     },
     {
-      q: 'What if the tree is extremely deep?',
-      a: 'Recursion can blow the call stack. Prefer the iterative version — a real concern in languages without tail-call optimization.',
+      heading: '3. Complexity, grilled',
+      qa: [
+        {
+          q: "Time complexity — and why can't it be faster?",
+          a: 'O(n): each node is visited once. It cannot be sub-linear — the deepest leaf could be anywhere, so any correct algorithm must inspect all n nodes. O(n) is optimal.',
+        },
+        {
+          q: 'Space of the recursive version — be precise.',
+          a: "O(h), the height, because at the deepest point every ancestor's frame is still on the stack. That's O(log n) for a balanced tree but O(n) for a skewed one. The senior phrasing: “O(h) — O(log n) balanced, O(n) worst case.”",
+        },
+        {
+          q: 'And the BFS space?',
+          a: 'O(w), the maximum width — the queue holds at most one level. That is O(1) on a skewed tree (the win over recursion) but up to ~n/2 = O(n) on the bottom level of a full tree. Recursion and BFS have opposite worst cases.',
+        },
+        {
+          q: 'So which one is more space-efficient?',
+          a: 'It depends on shape. Recursion (O(h)) wins on wide/balanced trees; BFS (O(w)) wins on deep/skewed trees. There is no universal winner — naming that trade-off is exactly what they want to hear.',
+        },
+      ],
     },
     {
-      q: 'What about minimum depth instead?',
-      a: 'Subtle: a null child does NOT count as a path end, so you cannot blindly take min(left, right) — you must guard the single-child case. max and min are not symmetric here.',
+      heading: "4. Edge cases they'll throw at you",
+      qa: [
+        { q: 'Empty tree (root = null)', a: '→ 0. The base case must return 0 without dereferencing null.' },
+        { q: 'Single node', a: '→ 1, from 1 + max(0, 0). Confirms your +1 and base case line up.' },
+        { q: 'A long left- or right-skewed chain of n nodes', a: '→ n. The recursion-stack stress test — be ready to switch to iterative if they say n is large.' },
+        { q: 'Perfectly balanced tree', a: 'Depth = ⌊log₂ n⌋ + 1 — the best case for recursion space, O(log n).' },
+        { q: 'A ~100,000-node deep tree in JavaScript', a: 'Recursion throws “Maximum call stack size exceeded” (JS stacks are ~10^4 frames). This is precisely why they ask for the iterative version.' },
+      ],
     },
     {
-      q: 'Recursion vs BFS — which do you prefer here, and why?',
-      a: 'Recursion is shortest and clearest (O(h) stack). BFS is safer on a degenerate tree (O(width) queue, no stack overflow). Naming that trade-off out loud is what a senior candidate does.',
+      heading: '5. Gotchas that fail candidates',
+      qa: [
+        { q: 'Nodes vs edges off-by-one', a: 'max(left, right) + 1 vs max(left, right): the +1 counts the current node. Clarifying the definition up front prevents the mistake entirely.' },
+        { q: 'Using array.shift() as the BFS queue', a: 'shift() is O(n) — it re-indexes the array — so per node it makes BFS O(n²). Keep it O(n) with a level→next array swap, a head pointer, or a real deque.' },
+        { q: 'Forgetting the null base case', a: 'Dropping “if (node == null) return 0” dereferences null and crashes. The base case both stops recursion and seeds the values that bubble up.' },
+        { q: 'Assuming balance or BST order', a: "It's a plain binary tree — no pruning, no binary search. You must visit every node." },
+      ],
+    },
+    {
+      heading: '6. Variations they pivot to',
+      intro: 'An Easy problem is a springboard. Expect the interviewer to morph it into one of these:',
+      qa: [
+        { q: 'Minimum Depth of Binary Tree', a: "Trap: a null child is NOT a path end, so you can't take min(left, right) blindly — guard the single-child case (recurse the non-null side). max and min are not symmetric here." },
+        { q: 'Diameter of Binary Tree', a: 'The first time the return value and the answer diverge: the helper still returns height, but you track the best (left + right) — the path bending at a node — in a side variable.' },
+        { q: 'Balanced Binary Tree', a: 'Return height, but short-circuit to -1 the instant any subtree pair differs in height by more than 1 — a height computation carrying an early-exit signal.' },
+        { q: 'Maximum Depth of an N-ary Tree', a: 'Same shape, combined over a children array: 1 + max(depth(child) for every child), with 0 for no children.' },
+        { q: 'Level-order traversal / deepest leaves', a: 'Your BFS already walks level by level — collect each level for level-order; the final level is the set of deepest leaves.' },
+      ],
+    },
+    {
+      heading: '7. The transferable pattern',
+      qa: [
+        {
+          q: 'What is the reusable idea here?',
+          a: 'Recognition trigger: Tree + “a fact about each subtree built from its children’s facts” ⇒ DFS, post-order — combine left and right, then add yourself. The same machinery solves Diameter, Path Sum, Balanced, Count Nodes, Invert Tree, and Lowest Common Ancestor. Learn the shape once; vary only the Contract and the Combine.',
+        },
+      ],
+    },
+    {
+      heading: '8. What the interviewer is actually scoring',
+      intro: 'On an Easy problem correctness is assumed — they are scoring how you think.',
+      qa: [
+        { q: 'Communication', a: 'Did you clarify (nodes vs edges, size) before coding, think out loud, and state complexity unprompted?' },
+        { q: 'Depth of understanding', a: 'Did you volunteer the O(h) space and the skewed-tree stack risk, and offer the iterative alternative — without being asked?' },
+        { q: 'Pattern transfer', a: 'Did you recognize the post-order “combine the children’s answers” shape and name the family it belongs to?' },
+        { q: 'Code quality & testing', a: 'Clean base case, no null dereference, and a dry-run on an edge case (empty, single, skewed) before you say “done.”' },
+      ],
     },
   ],
-  transferable:
-    'Recognition trigger: Tree + "a fact about each subtree built from its children\'s facts" ⇒ DFS, post-order — combine left & right, then add yourself. The same machinery solves Diameter, Path Sum, Balanced Binary Tree, Count Nodes, Invert Tree, and Lowest Common Ancestor. Learn the shape once; vary only the Contract and Combine.',
 
   testCases: [
     {
