@@ -20,7 +20,7 @@ export interface TestCase {
   /** Why this case matters (what it stresses / which edge it covers). */
   why: string;
   levelOrder: LevelOrderValue[];
-  expected: number;
+  expected: number | boolean;
   isEdge?: boolean;
 }
 

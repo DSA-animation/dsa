@@ -20,7 +20,7 @@
           <circle [attr.r]="radius" />
           <text class="val" text-anchor="middle" dominant-baseline="central">{{ n.val }}</text>
 
-          @if (n.status === 'returned' && n.returnValue !== undefined) {
+          @if (n.returnValue !== undefined) {
             <g class="badge" [attr.transform]="'translate(' + (radius - 3) + ',' + (3 - radius) + ')'">
               <circle class="badge-bg" r="12" />
               <text class="badge-text" text-anchor="middle" dominant-baseline="central">{{ n.returnValue }}</text>

@@ -7,7 +7,7 @@
  * algorithm — this is the decoupling that lets every data structure reuse one player.
  */
 
-export type NodeStatus = 'idle' | 'active' | 'recursing' | 'returned';
+export type NodeStatus = 'idle' | 'active' | 'recursing' | 'returned' | 'broken';
 
 /** The visual state of a single tree node at a given step. */
 export interface NodeVizState {

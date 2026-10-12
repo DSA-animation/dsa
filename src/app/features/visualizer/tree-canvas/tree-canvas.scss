@@ -57,6 +57,22 @@
   fill: #ecfdf5;
 }
 
+/* Unbalanced / sentinel node (returns -1) */
+.node--broken circle {
+  fill: #7f1d1d;
+  stroke: #f87171;
+}
+.node--broken .val {
+  fill: #fee2e2;
+}
+.node--broken .badge-bg {
+  fill: #ef4444;
+  stroke: #450a0a;
+}
+.node--broken .badge-text {
+  fill: #450a0a;
+}
+
 .badge-bg {
   fill: #22c55e;
   stroke: #052e16;
