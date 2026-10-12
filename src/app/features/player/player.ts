@@ -44,11 +44,16 @@ export class Player {
     return cases.find((c) => c.id === this.selectedCaseId()) ?? cases[0];
   });
   protected readonly currentTree = computed(() => fromLevelOrder(this.currentCase()?.levelOrder ?? []));
+  protected readonly treeB = computed(() => {
+    const b = this.currentCase()?.levelOrderB;
+    return b ? fromLevelOrder(b, 1000) : null;
+  });
+  protected readonly isDual = computed(() => this.problemData()?.dual ?? false);
 
   // The trace for the selected approach + case.
   protected readonly steps = computed(() => {
     const sol = this.currentSolution();
-    return sol ? sol.buildTrace(this.currentTree(), this.currentCase()?.arg) : [];
+    return sol ? sol.buildTrace(this.currentTree(), this.currentCase()?.arg, this.treeB()) : [];
   });
 
   // Playback state.

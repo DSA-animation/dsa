@@ -20,6 +20,8 @@ export interface TestCase {
   /** Why this case matters (what it stresses / which edge it covers). */
   why: string;
   levelOrder: LevelOrderValue[];
+  /** Second tree for dual-tree problems (Same Tree, Subtree, Merge); built with a disjoint id range. */
+  levelOrderB?: LevelOrderValue[];
   expected: number | boolean;
   /** An extra scalar input the algorithm needs, e.g. Path Sum's targetSum. */
   arg?: number;
@@ -71,8 +73,8 @@ export interface Solution {
    * highlights on pseudocode line i (identity) — fine when the code lines up 1:1.
    */
   codeMap?: Partial<Record<Language, number[]>>;
-  /** Instrumented reference implementation → the trace the player animates. `arg` is the test case's optional scalar (e.g. targetSum). */
-  buildTrace: (root: TreeNode | null, arg?: number) => TraceStep[];
+  /** Instrumented reference implementation → the trace the player animates. `arg` is the test case's optional scalar (e.g. targetSum); `rootB` is the second tree for dual-tree problems. */
+  buildTrace: (root: TreeNode | null, arg?: number, rootB?: TreeNode | null) => TraceStep[];
 }
 
 /** A fully-authored, playable problem with its interview-prep content. */
@@ -84,6 +86,8 @@ export interface Problem {
   difficulty: Difficulty;
   leetcode?: number;
   statement: string;
+  /** True when the problem compares two separate trees (renders side-by-side canvases). */
+  dual?: boolean;
   /** Companies this problem is commonly reported to be asked at (curated; LeetCode's exact tags are paywalled). */
   companies: CompanyTag[];
   /** Honest note on the experience level this problem targets (per-question YOE isn't published). */

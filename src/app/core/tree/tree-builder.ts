@@ -18,12 +18,12 @@ import { LevelOrderValue, TreeNode } from './tree-node.model';
  *
  * Node ids are assigned in BFS order starting at 0 (root = 0).
  */
-export function fromLevelOrder(values: readonly LevelOrderValue[]): TreeNode | null {
+export function fromLevelOrder(values: readonly LevelOrderValue[], startId = 0): TreeNode | null {
   if (values.length === 0 || values[0] === null || values[0] === undefined) {
     return null;
   }
 
-  let nextId = 0;
+  let nextId = startId;
   const makeNode = (val: number): TreeNode => ({ id: nextId++, val, left: null, right: null });
 
   const root = makeNode(values[0]);
