@@ -17,17 +17,16 @@ export interface TestCase {
   isEdge?: boolean;
 }
 
-/** A single interview question + model answer. */
-export interface InterviewQA {
-  q: string;
-  a: string;
+/** One turn of the mock interview: what the interviewer asks, and the ideal candidate answer. */
+export interface InterviewExchange {
+  interviewer: string;
+  candidate: string;
 }
 
-/** A themed group of interview probes (clarifying, complexity, edge cases, variations…). */
+/** A phase of the interview (opening, approach, complexity, follow-ups…). */
 export interface InterviewSection {
   heading: string;
-  intro?: string;
-  qa: InterviewQA[];
+  exchanges: InterviewExchange[];
 }
 
 /** The reusable Recursion Recipe, filled per recursive approach. */

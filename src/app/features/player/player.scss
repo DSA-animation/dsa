@@ -420,25 +420,55 @@
   }
 }
 
-/* ---- Interview tab (sectioned, scrollable) ---- */
+/* ---- Interview tab (mock-interview transcript) ---- */
 .interview {
-  .isec {
-    margin-bottom: 22px;
+  .phase {
+    margin-bottom: 20px;
+  }
+  .phase__label {
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #94a3b8;
+    margin: 0 0 12px;
     padding-bottom: 6px;
     border-bottom: 1px solid #f1f5f9;
   }
-  .isec:last-child {
-    border-bottom: none;
+  .turn p {
+    margin: 3px 0 0;
+    line-height: 1.55;
   }
-  .isec__intro {
-    color: #64748b;
-    font-size: 0.86rem;
-    font-style: italic;
-    margin: -2px 0 12px;
+  .turn__who {
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
-  .qa {
-    padding-left: 12px;
-    border-left: 2px solid #e2e8f0;
+  .turn--int {
+    margin-bottom: 8px;
+
+    .turn__who {
+      color: #64748b;
+    }
+    p {
+      color: #0f172a;
+      font-weight: 500;
+    }
+  }
+  .turn--cand {
+    margin: 0 0 18px 10px;
+    padding: 9px 13px;
+    background: #f0f9ff;
+    border-left: 3px solid #0ea5e9;
+    border-radius: 0 9px 9px 0;
+
+    .turn__who {
+      color: #0369a1;
+    }
+    p {
+      color: #0c4a6e;
+    }
   }
 }
 

@@ -135,19 +135,22 @@
             }
           }
           @case ('interview') {
-            <div class="tabpad prose interview">
-              <p class="hint">Google-bar grilling — every angle an interviewer can take on this problem.</p>
+            <div class="tabpad interview">
+              <p class="hint">A mock interview — the interviewer's questions and how a strong candidate answers.</p>
               @for (sec of p.interview; track sec.heading) {
-                <section class="isec">
-                  <h3>{{ sec.heading }}</h3>
-                  @if (sec.intro) { <p class="isec__intro">{{ sec.intro }}</p> }
-                  @for (item of sec.qa; track $index) {
-                    <div class="qa">
-                      <p class="qa__q">{{ item.q }}</p>
-                      <p class="qa__a">{{ item.a }}</p>
+                <div class="phase">
+                  <div class="phase__label">{{ sec.heading }}</div>
+                  @for (ex of sec.exchanges; track $index) {
+                    <div class="turn turn--int">
+                      <span class="turn__who">Interviewer</span>
+                      <p>{{ ex.interviewer }}</p>
+                    </div>
+                    <div class="turn turn--cand">
+                      <span class="turn__who">Candidate</span>
+                      <p>{{ ex.candidate }}</p>
                     </div>
                   }
-                </section>
+                </div>
               }
             </div>
           }
