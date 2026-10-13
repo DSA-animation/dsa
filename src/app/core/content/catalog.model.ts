@@ -75,6 +75,8 @@ export interface Solution {
   codeMap?: Partial<Record<Language, number[]>>;
   /** Instrumented reference implementation → the trace the player animates. `arg` is the test case's optional scalar (e.g. targetSum); `rootB` is the second tree for dual-tree problems. */
   buildTrace: (root: TreeNode | null, arg?: number, rootB?: TreeNode | null) => TraceStep[];
+  /** For problems that build a NEW tree (Merge): construct the result tree for a third canvas (disjoint id range, deterministic so its ids match the trace). */
+  resultTree?: (a: TreeNode | null, b: TreeNode | null) => TreeNode | null;
 }
 
 /** A fully-authored, playable problem with its interview-prep content. */

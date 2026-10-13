@@ -49,6 +49,8 @@ export class Player {
     return b ? fromLevelOrder(b, 1000) : null;
   });
   protected readonly isDual = computed(() => this.problemData()?.dual ?? false);
+  protected readonly resultTree = computed(() => this.currentSolution()?.resultTree?.(this.currentTree(), this.treeB()) ?? null);
+  protected readonly hasResult = computed(() => !!this.resultTree());
 
   // The trace for the selected approach + case.
   protected readonly steps = computed(() => {

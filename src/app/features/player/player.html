@@ -56,6 +56,12 @@
             <span class="subtree__label">Tree 2</span>
             <div class="subtree__canvas"><am-tree-canvas [root]="treeB()" [nodeStates]="nodeStates()" /></div>
           </div>
+          @if (hasResult()) {
+            <div class="subtree">
+              <span class="subtree__label">Merged</span>
+              <div class="subtree__canvas"><am-tree-canvas [root]="resultTree()" [nodeStates]="nodeStates()" /></div>
+            </div>
+          }
         } @else {
           <am-tree-canvas [root]="currentTree()" [nodeStates]="nodeStates()" />
         }

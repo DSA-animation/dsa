@@ -1,6 +1,7 @@
 import { balancedProblem } from '../../content/trees/balanced';
 import { diameterProblem } from '../../content/trees/diameter';
 import { maxDepthProblem } from '../../content/trees/max-depth';
+import { mergeProblem } from '../../content/trees/merge';
 import { minDepthProblem } from '../../content/trees/min-depth';
 import { pathSumProblem } from '../../content/trees/path-sum';
 import { sameTreeProblem } from '../../content/trees/same-tree';
@@ -43,8 +44,8 @@ export const PATTERNS: Record<string, Pattern> = {
     dsId: 'trees',
     title: 'Dual-tree recursion',
     blurb: 'Recurse two trees in lockstep.',
-    problemIds: ['same-tree', 'symmetric-tree', 'subtree-of-another-tree'],
-    comingSoon: ['Merge Two Binary Trees'],
+    problemIds: ['same-tree', 'symmetric-tree', 'subtree-of-another-tree', 'merge-two-binary-trees'],
+    comingSoon: [],
   },
   'top-down': {
     id: 'top-down',
@@ -65,6 +66,7 @@ export const PROBLEMS: Record<string, Problem> = {
   'same-tree': sameTreeProblem,
   'symmetric-tree': symmetricProblem,
   'subtree-of-another-tree': subtreeProblem,
+  'merge-two-binary-trees': mergeProblem,
 };
 
 export const getDataStructure = (id: string): DataStructure | undefined =>
