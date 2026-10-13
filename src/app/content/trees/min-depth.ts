@@ -159,15 +159,12 @@ export const minDepthProblem: Problem = {
   statement:
     'Given the root of a binary tree, return its minimum depth — the number of nodes along the shortest path from the root down to the nearest leaf (a node with no children).',
   companies: [
-    { name: 'Amazon', level: '0–5 yrs' },
-    { name: 'Microsoft', level: '0–5 yrs' },
-    { name: 'Meta', level: '0–5 yrs' },
-    { name: 'Apple', level: '0–5 yrs' },
-    { name: 'Bloomberg', level: '0–5 yrs' },
-    { name: 'Oracle', level: '0–5 yrs' },
+    { name: 'Amazon' },
+    { name: 'Meta' },
+    { name: 'Microsoft' },
   ],
   experienceNote:
-    "Difficulty sets the level: an Easy warm-up asked broadly from new-grad to mid-level (~0–5 yrs). Interviewers love it because the null-child trap quietly separates careful candidates from those who pattern-match off maximum depth.",
+    'An Easy warm-up, but reported at noticeably fewer companies than Maximum Depth (mainly Amazon, Meta, Microsoft) — and for a reason: the null-child trap quietly separates careful candidates from those who pattern-match off max depth.',
   keyRealization:
     'Minimum depth looks like maximum depth with min for max — but a null child is NOT a leaf. You can only take min when both children exist; otherwise you are forced down the side that does.',
   testCases: [

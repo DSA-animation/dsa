@@ -113,15 +113,12 @@
   border: 1px solid #ddd6fe;
   border-radius: 6px;
   padding: 2px 8px;
-
-  em {
-    font-style: normal;
-    font-weight: 600;
-    color: #6d28d9;
-    margin-left: 5px;
-    padding-left: 5px;
-    border-left: 1px solid #ddd6fe;
-  }
+}
+.companies__src {
+  font-size: 0.64rem;
+  font-style: italic;
+  color: #64748b;
+  margin-left: 2px;
 }
 .exp-note {
   margin: 7px 2px 0;

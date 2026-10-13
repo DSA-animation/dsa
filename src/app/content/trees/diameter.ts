@@ -184,15 +184,23 @@ export const diameterProblem: Problem = {
   statement:
     'Given the root of a binary tree, return its diameter: the number of edges on the longest path between any two nodes. The path need not pass through the root.',
   companies: [
-    { name: 'Meta', level: '0–5 yrs' },
-    { name: 'Amazon', level: '0–5 yrs' },
-    { name: 'Google', level: '0–5 yrs' },
-    { name: 'Microsoft', level: '0–5 yrs' },
-    { name: 'Apple', level: '0–5 yrs' },
-    { name: 'Bloomberg', level: '0–5 yrs' },
+    { name: 'Google' },
+    { name: 'Amazon' },
+    { name: 'Meta' },
+    { name: 'Microsoft' },
+    { name: 'Apple' },
+    { name: 'Bloomberg' },
+    { name: 'Adobe' },
+    { name: 'ByteDance' },
+    { name: 'Atlassian' },
+    { name: 'Oracle' },
+    { name: 'Intel' },
+    { name: 'VMware' },
+    { name: 'Baidu' },
+    { name: 'Qualtrics' },
   ],
   experienceNote:
-    'Marked Easy, but it is where "the value you return ≠ the value you answer" first appears — so it shows up from new-grad to mid-level (~0–5 yrs) and is a favorite quick opener in senior loops to see if you spot that the longest path can skip the root.',
+    'Easy to state, with real teeth — one of the more widely reported tree questions (Meta, Google, Amazon, Microsoft, Bloomberg, ByteDance and others). The “the answer isn’t what you return” insight is what interviewers are probing, which is why it appears even in senior loops.',
   keyRealization:
     'The longest path bending through a node is leftHeight + rightHeight (in edges), and the winning node is often NOT the root. So the function returns one quantity (height) upward while tracking a different one (the best left+right) at every node.',
   interview: [

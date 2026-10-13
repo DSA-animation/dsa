@@ -18,10 +18,11 @@
         </div>
         @if (p.companies.length) {
           <div class="companies">
-            <span class="companies__label">Asked at</span>
+            <span class="companies__label">Commonly reported at</span>
             @for (c of p.companies; track c.name) {
-              <span class="company">{{ c.name }} <em>{{ c.level }}</em></span>
+              <span class="company">{{ c.name }}</span>
             }
+            <span class="companies__src">crowd-sourced · directional, not official</span>
           </div>
           <p class="exp-note">{{ p.experienceNote }}</p>
         }

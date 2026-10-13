@@ -184,14 +184,16 @@ export const subtreeProblem: Problem = {
     'Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same structure and values as subRoot. A subtree is any node of root together with all of its descendants.',
   dual: true,
   companies: [
-    { name: 'Amazon', level: '0–5 yrs' },
-    { name: 'Meta', level: '0–5 yrs' },
-    { name: 'Microsoft', level: '0–5 yrs' },
-    { name: 'Google', level: '0–5 yrs' },
-    { name: 'Apple', level: '0–5 yrs' },
+    { name: 'Amazon' },
+    { name: 'Google' },
+    { name: 'Meta' },
+    { name: 'Microsoft' },
+    { name: 'Bloomberg' },
+    { name: 'eBay' },
+    { name: 'Samsung' },
   ],
   experienceNote:
-    "An Easy warm-up (~0–5 yrs) that's really a composition question: do you recognize it as Same Tree run at every node? The strong follow-up (serialize + string match for O(n+m)) is where it tilts toward mid-level.",
+    'An Easy problem commonly reported at Amazon, Google, Meta, Microsoft and Bloomberg — Amazon especially. The real discussion is complexity: the naive O(n·m) “Same Tree at every node”, and whether you can reach linear with serialization plus substring search.',
   keyRealization:
     "A subtree match is just Same Tree applied at every node: walk the big tree, and at each node ask 'is the pattern rooted here?'. If any node says yes, the pattern is a subtree.",
   interview: [

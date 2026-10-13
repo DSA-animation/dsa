@@ -6,11 +6,13 @@ export type Language = 'javascript' | 'python' | 'java' | 'cpp';
 
 export type Difficulty = 'Easy' | 'Medium' | 'Hard';
 
-/** A company tag with the typical experience level at which this problem appears there. */
+/**
+ * A company this problem has been reported — crowd-sourced, from LeetCode's
+ * (paywalled) company tags via public mirrors — to be asked at. Per-company,
+ * per-question years-of-experience is NOT published anywhere, so we don't claim it.
+ */
 export interface CompanyTag {
   name: string;
-  /** Typical years-of-experience band / level (a guide — per-question YOE isn't published). */
-  level: string;
 }
 
 /** One input the learner can run any approach on — including deliberate edge cases. */
@@ -92,7 +94,7 @@ export interface Problem {
   dual?: boolean;
   /** Overrides for the canvas labels (defaults: Tree 1 / Tree 2 / Result). */
   canvasLabels?: { primary?: string; secondary?: string; result?: string };
-  /** Companies this problem is commonly reported to be asked at (curated; LeetCode's exact tags are paywalled). */
+  /** Companies this problem is commonly reported to be asked at (crowd-sourced from LeetCode's paywalled company tags via public mirrors — directional, not official). */
   companies: CompanyTag[];
   /** Honest note on the experience level this problem targets (per-question YOE isn't published). */
   experienceNote: string;

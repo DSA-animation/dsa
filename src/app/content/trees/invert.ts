@@ -150,14 +150,17 @@ export const invertProblem: Problem = {
   statement:
     'Given the root of a binary tree, invert it — swap every node’s left and right children — and return the root of the mirrored tree.',
   companies: [
-    { name: 'Google', level: '0–5 yrs' },
-    { name: 'Amazon', level: '0–5 yrs' },
-    { name: 'Microsoft', level: '0–5 yrs' },
-    { name: 'Meta', level: '0–5 yrs' },
-    { name: 'Apple', level: '0–5 yrs' },
+    { name: 'Google' },
+    { name: 'Amazon' },
+    { name: 'Meta' },
+    { name: 'Microsoft' },
+    { name: 'Bloomberg' },
+    { name: 'Uber' },
+    { name: 'Salesforce' },
+    { name: 'VMware' },
   ],
   experienceNote:
-    'The famous "invert a binary tree" warm-up (~0–5 yrs). It’s a gimme on correctness — what an interviewer actually watches is whether you state it cleanly, handle null, and give the complexity without fuss.',
+    'The famous “invert a binary tree” warm-up — reported at Google, Amazon, Meta, Microsoft and Bloomberg. It’s a gimme on correctness; what an interviewer actually watches is whether you state it cleanly, handle null, and give the complexity without fuss.',
   keyRealization:
     "Inverting a tree is just: at every node, swap its two children, and recurse. The swap plus the recursion flips the whole tree into its mirror.",
   interview: [

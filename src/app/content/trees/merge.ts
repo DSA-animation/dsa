@@ -186,14 +186,13 @@ export const mergeProblem: Problem = {
   dual: true,
   canvasLabels: { result: 'Merged' },
   companies: [
-    { name: 'Amazon', level: '0–5 yrs' },
-    { name: 'Microsoft', level: '0–5 yrs' },
-    { name: 'Adobe', level: '0–5 yrs' },
-    { name: 'Meta', level: '0–5 yrs' },
-    { name: 'Bloomberg', level: '0–5 yrs' },
+    { name: 'Amazon' },
+    { name: 'Adobe' },
+    { name: 'Oracle' },
+    { name: 'Huawei' },
   ],
   experienceNote:
-    "An Easy warm-up (~0–5 yrs). The thing interviewers check: do you see that the two null cases ARE the copy rule (return the other subtree), rather than writing extra code to handle 'one side missing'?",
+    'An Easy problem with a narrower reported footprint (Amazon, Adobe, Oracle, Huawei) than the FAANG-favourite tree questions. What interviewers check: do you see that the two null cases ARE the copy rule (return the other subtree), rather than writing extra code for “one side missing”.',
   keyRealization:
     'Overlay the two trees. Where both have a node, the merged node is their sum; where only one has a node, that whole subtree is carried over. The two null base cases express the copy rule for free.',
   interview: [

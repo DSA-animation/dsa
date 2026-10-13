@@ -198,15 +198,16 @@ export const balancedProblem: Problem = {
   statement:
     'Given a binary tree, determine if it is height-balanced: for every node, the heights of its left and right subtrees differ by at most 1.',
   companies: [
-    { name: 'Amazon', level: '0–5 yrs' },
-    { name: 'Microsoft', level: '0–5 yrs' },
-    { name: 'Google', level: '0–5 yrs' },
-    { name: 'Meta', level: '0–5 yrs' },
-    { name: 'Apple', level: '0–5 yrs' },
-    { name: 'Bloomberg', level: '0–5 yrs' },
+    { name: 'Google' },
+    { name: 'Amazon' },
+    { name: 'Meta' },
+    { name: 'Microsoft' },
+    { name: 'Bloomberg' },
+    { name: 'Adobe' },
+    { name: 'Cisco' },
   ],
   experienceNote:
-    "An Easy warm-up (~0–5 yrs), but the one that teaches the reusable 'helper returns the info, wrapper returns the answer' instinct — so interviewers use it to see whether you reach for the O(n) sentinel or settle for the O(n²) brute force.",
+    'An Easy problem commonly reported at Google, Amazon, Meta, Microsoft, Bloomberg and Adobe. Interviewers watch for the −1 short-circuit that turns an O(n²) check into O(n) — that optimisation is the real signal here.',
   keyRealization:
     'When the info you must pass UP the recursion (a height) is a different type than the answer you are asked for (a boolean), split into a helper that returns the height and a wrapper that translates it — and encode the extra condition as a -1 sentinel riding on the height channel.',
   interview: [

@@ -176,15 +176,16 @@ export const sameTreeProblem: Problem = {
     'Given the roots of two binary trees p and q, return true if they are the same tree — identical in structure and in every node value.',
   dual: true,
   companies: [
-    { name: 'Amazon', level: '0–5 yrs' },
-    { name: 'Microsoft', level: '0–5 yrs' },
-    { name: 'Google', level: '0–5 yrs' },
-    { name: 'Meta', level: '0–5 yrs' },
-    { name: 'Apple', level: '0–5 yrs' },
-    { name: 'Bloomberg', level: '0–5 yrs' },
+    { name: 'Google' },
+    { name: 'Amazon' },
+    { name: 'Meta' },
+    { name: 'Microsoft' },
+    { name: 'Apple' },
+    { name: 'Bloomberg' },
+    { name: 'LinkedIn' },
   ],
   experienceNote:
-    "An Easy warm-up (~0–5 yrs), but a load-bearing one: the 'recurse two trees in lockstep' move is the engine for Symmetric Tree and Subtree of Another Tree, so interviewers use it to check your base-case discipline.",
+    'An Easy warm-up — one of the classic openers (Google, Amazon, Meta, Microsoft, Apple, Bloomberg, LinkedIn). It’s rarely the whole interview; it’s the two-minute sanity check before the harder question.',
   keyRealization:
     'To compare two trees, recurse into BOTH in lockstep. They match iff both are null here, OR both are non-null with equal values AND matching left subtrees AND matching right subtrees.',
   interview: [

@@ -162,14 +162,17 @@ export const pathSumProblem: Problem = {
   statement:
     'Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf path whose values add up to targetSum. A leaf is a node with no children. (Node values can be negative.)',
   companies: [
-    { name: 'Amazon', level: '0–5 yrs' },
-    { name: 'Microsoft', level: '0–5 yrs' },
-    { name: 'Meta', level: '0–5 yrs' },
-    { name: 'Apple', level: '0–5 yrs' },
-    { name: 'Bloomberg', level: '0–5 yrs' },
+    { name: 'Amazon' },
+    { name: 'Meta' },
+    { name: 'Microsoft' },
+    { name: 'Apple' },
+    { name: 'Adobe' },
+    { name: 'Oracle' },
+    { name: 'Yahoo' },
+    { name: 'Zillow' },
   ],
   experienceNote:
-    "An Easy warm-up (~0–5 yrs). The probe is the leaf check: candidates who shortcut 'null with remaining 0 ⇒ true' quietly break on one-child nodes — interviewers watch for whether you insist a path end at a real leaf.",
+    'An Easy warm-up reported at Amazon, Meta, Microsoft, Apple, Adobe and Oracle. The value interviewers extract: do you carry the remaining target DOWN each path rather than summing upward, and do you get the leaf condition exactly right.',
   keyRealization:
     "Don't carry the running sum up to compare at the end — carry the leftover DOWN. Subtract each node's value from the target as you descend; at a leaf the whole problem collapses to one check: does this leaf's value equal the remaining?",
   interview: [
