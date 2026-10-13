@@ -1,5 +1,6 @@
 import { balancedProblem } from '../../content/trees/balanced';
 import { diameterProblem } from '../../content/trees/diameter';
+import { invertProblem } from '../../content/trees/invert';
 import { maxDepthProblem } from '../../content/trees/max-depth';
 import { mergeProblem } from '../../content/trees/merge';
 import { minDepthProblem } from '../../content/trees/min-depth';
@@ -36,8 +37,8 @@ export const PATTERNS: Record<string, Pattern> = {
     dsId: 'trees',
     title: 'DFS — Bubble-up (postorder)',
     blurb: "Solve a node from its children's answers. The single most common tree pattern.",
-    problemIds: ['maximum-depth', 'minimum-depth', 'diameter-of-binary-tree', 'balanced-binary-tree'],
-    comingSoon: ['Invert Binary Tree'],
+    problemIds: ['maximum-depth', 'minimum-depth', 'diameter-of-binary-tree', 'balanced-binary-tree', 'invert-binary-tree'],
+    comingSoon: [],
   },
   'dual-tree': {
     id: 'dual-tree',
@@ -67,6 +68,7 @@ export const PROBLEMS: Record<string, Problem> = {
   'symmetric-tree': symmetricProblem,
   'subtree-of-another-tree': subtreeProblem,
   'merge-two-binary-trees': mergeProblem,
+  'invert-binary-tree': invertProblem,
 };
 
 export const getDataStructure = (id: string): DataStructure | undefined =>

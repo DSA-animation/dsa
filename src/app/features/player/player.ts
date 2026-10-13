@@ -51,6 +51,10 @@ export class Player {
   protected readonly isDual = computed(() => this.problemData()?.dual ?? false);
   protected readonly resultTree = computed(() => this.currentSolution()?.resultTree?.(this.currentTree(), this.treeB()) ?? null);
   protected readonly hasResult = computed(() => !!this.resultTree());
+  protected readonly showMulti = computed(() => this.isDual() || this.hasResult());
+  protected readonly primaryLabel = computed(() => this.problemData()?.canvasLabels?.primary ?? 'Tree 1');
+  protected readonly secondaryLabel = computed(() => this.problemData()?.canvasLabels?.secondary ?? 'Tree 2');
+  protected readonly resultLabel = computed(() => this.problemData()?.canvasLabels?.result ?? 'Result');
 
   // The trace for the selected approach + case.
   protected readonly steps = computed(() => {

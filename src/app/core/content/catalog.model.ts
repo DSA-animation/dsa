@@ -90,6 +90,8 @@ export interface Problem {
   statement: string;
   /** True when the problem compares two separate trees (renders side-by-side canvases). */
   dual?: boolean;
+  /** Overrides for the canvas labels (defaults: Tree 1 / Tree 2 / Result). */
+  canvasLabels?: { primary?: string; secondary?: string; result?: string };
   /** Companies this problem is commonly reported to be asked at (curated; LeetCode's exact tags are paywalled). */
   companies: CompanyTag[];
   /** Honest note on the experience level this problem targets (per-question YOE isn't published). */

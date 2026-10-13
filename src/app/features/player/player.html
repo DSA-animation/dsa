@@ -46,19 +46,21 @@
         </div>
       </div>
 
-      <div class="stage" [class.stage--dual]="isDual()">
-        @if (isDual()) {
+      <div class="stage" [class.stage--dual]="showMulti()">
+        @if (showMulti()) {
           <div class="subtree">
-            <span class="subtree__label">Tree 1</span>
+            <span class="subtree__label">{{ primaryLabel() }}</span>
             <div class="subtree__canvas"><am-tree-canvas [root]="currentTree()" [nodeStates]="nodeStates()" /></div>
           </div>
-          <div class="subtree">
-            <span class="subtree__label">Tree 2</span>
-            <div class="subtree__canvas"><am-tree-canvas [root]="treeB()" [nodeStates]="nodeStates()" /></div>
-          </div>
+          @if (isDual()) {
+            <div class="subtree">
+              <span class="subtree__label">{{ secondaryLabel() }}</span>
+              <div class="subtree__canvas"><am-tree-canvas [root]="treeB()" [nodeStates]="nodeStates()" /></div>
+            </div>
+          }
           @if (hasResult()) {
             <div class="subtree">
-              <span class="subtree__label">Merged</span>
+              <span class="subtree__label">{{ resultLabel() }}</span>
               <div class="subtree__canvas"><am-tree-canvas [root]="resultTree()" [nodeStates]="nodeStates()" /></div>
             </div>
           }

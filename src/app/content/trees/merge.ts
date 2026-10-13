@@ -184,6 +184,7 @@ export const mergeProblem: Problem = {
   statement:
     'Given two binary trees, overlay one on the other: where both have a node, the merged node is the sum of the two values; where only one has a node, that node (and its subtree) is used as-is. Return the merged tree.',
   dual: true,
+  canvasLabels: { result: 'Merged' },
   companies: [
     { name: 'Amazon', level: '0–5 yrs' },
     { name: 'Microsoft', level: '0–5 yrs' },
