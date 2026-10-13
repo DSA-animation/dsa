@@ -1,0 +1,132 @@
+import { LevelOrderValue, TreeNode } from '../tree/tree-node.model';
+import { TraceStep } from '../trace/step.model';
+
+/** Languages we author concrete code for. Each is line-aligned with the pseudocode. */
+export type Language = 'javascript' | 'python' | 'java' | 'cpp';
+
+export type Difficulty = 'Easy' | 'Medium' | 'Hard';
+
+/**
+ * A company this problem has been reported — crowd-sourced, from LeetCode's
+ * (paywalled) company tags via public mirrors — to be asked at. Per-company,
+ * per-question years-of-experience is NOT published anywhere, so we don't claim it.
+ */
+export interface CompanyTag {
+  name: string;
+}
+
+/** One input the learner can run any approach on — including deliberate edge cases. */
+export interface TestCase {
+  id: string;
+  label: string;
+  /** Why this case matters (what it stresses / which edge it covers). */
+  why: string;
+  levelOrder: LevelOrderValue[];
+  /** Second tree for dual-tree problems (Same Tree, Subtree, Merge); built with a disjoint id range. */
+  levelOrderB?: LevelOrderValue[];
+  expected: number | boolean;
+  /** An extra scalar input the algorithm needs, e.g. Path Sum's targetSum. */
+  arg?: number;
+  isEdge?: boolean;
+}
+
+/** One turn of the mock interview: what the interviewer asks, and the ideal candidate answer. */
+export interface InterviewExchange {
+  interviewer: string;
+  candidate: string;
+}
+
+/** A phase of the interview (opening, approach, complexity, follow-ups…). */
+export interface InterviewSection {
+  heading: string;
+  exchanges: InterviewExchange[];
+}
+
+/** The reusable Recursion Recipe, filled per recursive approach. */
+export interface RecursionRecipe {
+  contract: string;
+  baseCase: string;
+  recurse: string;
+  combine: string;
+}
+
+/**
+ * One way to solve the problem. A problem holds several of these, because in a
+ * real interview the candidate explores approaches (brute force, recursion,
+ * iterative) rather than jumping straight to the optimal one.
+ */
+export interface Solution {
+  id: string;
+  name: string; // "Recursive DFS (post-order)"
+  tagline: string; // one-line pitch
+  /** Label for the auxiliary-structure panel: "Call stack" for recursion, "Queue" for BFS. */
+  auxLabel: string;
+  complexity: { time: string; timeWhy: string; space: string; spaceWhy: string };
+  /** How you'd reason your way to THIS approach at a whiteboard. */
+  approach: string[];
+  /** Only for recursive approaches. */
+  recipe?: RecursionRecipe;
+  /** Pseudocode lines; `TraceStep.line` indexes into this. */
+  pseudocode: string[];
+  code: Record<Language, string[]>;
+  /**
+   * Optional per-language map: codeMap[lang][i] = the pseudocode line that code
+   * line i highlights on (-1 = never). When absent for a language, code line i
+   * highlights on pseudocode line i (identity) — fine when the code lines up 1:1.
+   */
+  codeMap?: Partial<Record<Language, number[]>>;
+  /** Instrumented reference implementation → the trace the player animates. `arg` is the test case's optional scalar (e.g. targetSum); `rootB` is the second tree for dual-tree problems. */
+  buildTrace: (root: TreeNode | null, arg?: number, rootB?: TreeNode | null) => TraceStep[];
+  /** For problems that build a NEW tree (Merge): construct the result tree for a third canvas (disjoint id range, deterministic so its ids match the trace). */
+  resultTree?: (a: TreeNode | null, b: TreeNode | null) => TreeNode | null;
+}
+
+/** A fully-authored, playable problem with its interview-prep content. */
+export interface Problem {
+  id: string;
+  title: string;
+  dsId: string;
+  patternId: string;
+  difficulty: Difficulty;
+  leetcode?: number;
+  statement: string;
+  /** True when the problem compares two separate trees (renders side-by-side canvases). */
+  dual?: boolean;
+  /** Overrides for the canvas labels (defaults: Tree 1 / Tree 2 / Result). */
+  canvasLabels?: { primary?: string; secondary?: string; result?: string };
+  /** Companies this problem is commonly reported to be asked at (crowd-sourced from LeetCode's paywalled company tags via public mirrors — directional, not official). */
+  companies: CompanyTag[];
+  /** Honest note on the experience level this problem targets (per-question YOE isn't published). */
+  experienceNote: string;
+
+  // ---- Shared interview-prep content (sourced from the learner's own notes) ----
+  /** The one insight that unlocks the problem. */
+  keyRealization: string;
+  /** A comprehensive, Google-bar interview drill covering every aspect of the problem. */
+  interview: InterviewSection[];
+
+  // ---- Inputs (shared across approaches) ----
+  testCases: TestCase[];
+
+  // ---- Approaches ----
+  solutions: Solution[];
+}
+
+/** A pattern groups problems that are solved the same way. */
+export interface Pattern {
+  id: string;
+  dsId: string;
+  title: string;
+  blurb: string;
+  problemIds: string[];
+  comingSoon: string[];
+}
+
+/** A top-level data structure / topic in the funnel. */
+export interface DataStructure {
+  id: string;
+  title: string;
+  blurb: string;
+  available: boolean;
+  patternIds: string[];
+}

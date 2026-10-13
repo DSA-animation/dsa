@@ -1,0 +1,192 @@
+@if (problemData(); as p) {
+  <section class="ws">
+    <!-- LEFT: visualization -->
+    <div class="pane pane--viz">
+      <nav class="crumbs">
+        <a routerLink="/">Topics</a><span class="sep">/</span>
+        <a [routerLink]="['/learn', ds()]">{{ dsData()?.title || ds() }}</a><span class="sep">/</span>
+        <a [routerLink]="['/learn', ds(), pattern()]">{{ patternData()?.title || pattern() }}</a>
+      </nav>
+
+      <div class="vhead">
+        <h1>{{ p.title }}</h1>
+        <div class="chips">
+          <span class="chip chip--diff">{{ p.difficulty }}</span>
+          @if (p.leetcode) { <span class="chip">LC {{ p.leetcode }}</span> }
+          <span class="chip">{{ currentSolution()?.complexity?.time }} time</span>
+          <span class="chip">{{ currentSolution()?.complexity?.space }} space</span>
+        </div>
+        @if (p.companies.length) {
+          <div class="companies">
+            <span class="companies__label">Commonly reported at</span>
+            @for (c of p.companies; track c.name) {
+              <span class="company">{{ c.name }}</span>
+            }
+            <span class="companies__src">crowd-sourced · directional, not official</span>
+          </div>
+          <p class="exp-note">{{ p.experienceNote }}</p>
+        }
+      </div>
+
+      <div class="segrow">
+        <span class="segrow__label">Approach</span>
+        <div class="seg">
+          @for (s of solutions(); track s.id) {
+            <button class="seg__btn" [class.is-active]="s.id === currentSolution()?.id" (click)="selectSolution(s.id)">{{ s.name }}</button>
+          }
+        </div>
+      </div>
+      <div class="segrow">
+        <span class="segrow__label">Test case</span>
+        <div class="seg seg--wrap">
+          @for (c of testCases(); track c.id) {
+            <button class="seg__btn" [class.is-active]="c.id === currentCase()?.id" (click)="selectCase(c.id)">
+              {{ c.label }} <span class="seg__exp">{{ c.expected }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="stage" [class.stage--dual]="showMulti()">
+        @if (showMulti()) {
+          <div class="subtree">
+            <span class="subtree__label">{{ primaryLabel() }}</span>
+            <div class="subtree__canvas"><am-tree-canvas [root]="currentTree()" [nodeStates]="nodeStates()" /></div>
+          </div>
+          @if (isDual()) {
+            <div class="subtree">
+              <span class="subtree__label">{{ secondaryLabel() }}</span>
+              <div class="subtree__canvas"><am-tree-canvas [root]="treeB()" [nodeStates]="nodeStates()" /></div>
+            </div>
+          }
+          @if (hasResult()) {
+            <div class="subtree">
+              <span class="subtree__label">{{ resultLabel() }}</span>
+              <div class="subtree__canvas"><am-tree-canvas [root]="resultTree()" [nodeStates]="nodeStates()" /></div>
+            </div>
+          }
+        } @else {
+          <am-tree-canvas [root]="currentTree()" [nodeStates]="nodeStates()" />
+        }
+      </div>
+
+      <div class="progress"><div class="progress__bar" [style.width.%]="pct()"></div></div>
+
+      <div class="controls">
+        <button class="btn" (click)="restart()" title="Restart">⟲</button>
+        <button class="btn" (click)="prev()" [disabled]="atStart()" title="Previous">‹</button>
+        <button class="btn btn--play" (click)="togglePlay()">{{ playing() ? '❚❚ Pause' : (atEnd() ? '↻ Replay' : '▶ Play') }}</button>
+        <button class="btn" (click)="next()" [disabled]="atEnd()" title="Next">›</button>
+        <label class="speed">Speed
+          <select (change)="onSpeed($event)">
+            <option value="0.5">0.5×</option>
+            <option value="1" selected>1×</option>
+            <option value="2">2×</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="now">
+        <p class="now__note" [class.now__note--done]="isDone()">{{ note() }}</p>
+        <div class="now__state">
+          <span class="now__chip now__chip--aux">
+            <em>{{ auxLabel() }}</em>
+            @for (f of aux(); track f.nodeId) { <b>{{ f.label }}</b> }
+            @if (!aux().length) { <b class="is-empty">empty</b> }
+          </span>
+          @for (v of varsEntries(); track v[0]) {
+            <span class="now__chip"><em>{{ v[0] }}</em> {{ v[1] }}</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: tabbed reference -->
+    <div class="pane pane--info">
+      <div class="tabbar">
+        <button [class.is-active]="activeTab() === 'pseudocode'" (click)="setTab('pseudocode')">Pseudocode</button>
+        <button [class.is-active]="activeTab() === 'code'" (click)="setTab('code')">Code</button>
+        <button [class.is-active]="activeTab() === 'approach'" (click)="setTab('approach')">Approach</button>
+        <button [class.is-active]="activeTab() === 'complexity'" (click)="setTab('complexity')">Complexity</button>
+        <button [class.is-active]="activeTab() === 'interview'" (click)="setTab('interview')">Interview</button>
+      </div>
+
+      <div class="tabbody">
+        @switch (activeTab()) {
+          @case ('pseudocode') {
+            <div class="tabpad">
+              <p class="hint">Highlights line-by-line as the animation plays.</p>
+              <am-code-view [lines]="pseudocode()" [activeLine]="activeLine()" />
+            </div>
+          }
+          @case ('code') {
+            <div class="tabpad">
+              <div class="langtabs">
+                @for (l of languages; track l.id) {
+                  <button class="langtab" [class.is-active]="language() === l.id" (click)="setLanguage(l.id)">{{ l.label }}</button>
+                }
+              </div>
+              <p class="hint">Same logic in every language — highlights line-by-line as the animation plays.</p>
+              <am-code-view [lines]="codeLines()" [activeLine]="activeLine()" [map]="codeMap()" />
+            </div>
+          }
+          @case ('approach') {
+            <div class="tabpad prose">
+              <div class="realization">
+                <span class="realization__tag">Key realization</span>
+                <p>{{ p.keyRealization }}</p>
+              </div>
+              <h3>How to approach it — {{ currentSolution()?.name }}</h3>
+              <ol class="approach-list">
+                @for (a of currentSolution()?.approach ?? []; track $index) { <li>{{ a }}</li> }
+              </ol>
+              @if (currentSolution()?.recipe; as r) {
+                <h3>The Recursion Recipe</h3>
+                <table class="recipe">
+                  <tr><th>Contract</th><td>{{ r.contract }}</td></tr>
+                  <tr><th>Base case</th><td>{{ r.baseCase }}</td></tr>
+                  <tr><th>Recurse</th><td>{{ r.recurse }}</td></tr>
+                  <tr><th>Combine</th><td>{{ r.combine }}</td></tr>
+                </table>
+              }
+            </div>
+          }
+          @case ('complexity') {
+            @if (currentSolution()?.complexity; as cx) {
+              <div class="tabpad prose">
+                <h3>Complexity — {{ currentSolution()?.name }}</h3>
+                <p><b>Time {{ cx.time }}</b> — {{ cx.timeWhy }}</p>
+                <p><b>Space {{ cx.space }}</b> — {{ cx.spaceWhy }}</p>
+              </div>
+            }
+          }
+          @case ('interview') {
+            <div class="tabpad interview">
+              <p class="hint">A mock interview — the interviewer's questions and how a strong candidate answers.</p>
+              @for (sec of p.interview; track sec.heading) {
+                <div class="phase">
+                  <div class="phase__label">{{ sec.heading }}</div>
+                  @for (ex of sec.exchanges; track $index) {
+                    <div class="turn turn--int">
+                      <span class="turn__who">Interviewer</span>
+                      <p>{{ ex.interviewer }}</p>
+                    </div>
+                    <div class="turn turn--cand">
+                      <span class="turn__who">Candidate</span>
+                      <p>{{ ex.candidate }}</p>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </section>
+} @else {
+  <section class="missing">
+    <h2>Problem not found</h2>
+    <a routerLink="/">← Back to topics</a>
+  </section>
+}

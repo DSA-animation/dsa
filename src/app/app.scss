@@ -1,0 +1,49 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffffcc;
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+  text-decoration: none;
+
+  &__play {
+    display: inline-grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 7px;
+    background: linear-gradient(135deg, #0ea5e9, #22c55e);
+    color: #fff;
+    font-size: 0.7rem;
+  }
+}
+
+.tagline {
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+@media (max-width: 520px) {
+  .tagline {
+    display: none;
+  }
+}
+
+.outlet {
+  display: block;
+}

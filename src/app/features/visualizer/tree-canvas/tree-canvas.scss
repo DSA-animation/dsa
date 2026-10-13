@@ -1,0 +1,95 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The SVG fills its bounded box; preserveAspectRatio="xMidYMid meet" scales the
+   whole tree to fit, centered — it never overflows or drives the page height. */
+.tree {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.edges line {
+  stroke: #475569;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.node {
+  circle {
+    fill: #1e293b;
+    stroke: #475569;
+    stroke-width: 2.5;
+    transition: fill 0.25s ease, stroke 0.25s ease;
+  }
+
+  .val {
+    fill: #e2e8f0;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 17px;
+    font-weight: 600;
+    user-select: none;
+  }
+}
+
+.node--active circle {
+  fill: #0ea5e9;
+  stroke: #7dd3fc;
+}
+.node--active .val {
+  fill: #052233;
+}
+
+.node--recursing circle {
+  fill: #1e293b;
+  stroke: #38bdf8;
+}
+
+.node--returned circle {
+  fill: #15803d;
+  stroke: #4ade80;
+}
+.node--returned .val {
+  fill: #ecfdf5;
+}
+
+/* Unbalanced / sentinel node (returns -1) */
+.node--broken circle {
+  fill: #7f1d1d;
+  stroke: #f87171;
+}
+.node--broken .val {
+  fill: #fee2e2;
+}
+.node--broken .badge-bg {
+  fill: #ef4444;
+  stroke: #450a0a;
+}
+.node--broken .badge-text {
+  fill: #450a0a;
+}
+
+.badge-bg {
+  fill: #22c55e;
+  stroke: #052e16;
+  stroke-width: 1.5;
+}
+.badge-text {
+  fill: #052e16;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.empty {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  margin: 0;
+  color: #94a3b8;
+  font-style: italic;
+}
